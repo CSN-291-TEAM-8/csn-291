@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const auth = require("./routes/auth");
 const authority = require('./routes/authority');
-const admin = require('./routes/admin');
 const student = require("./routes/student");
 const complain = require("./routes/complain");
 const db = require("./utils/db.config");
@@ -19,7 +18,6 @@ app.use(cors());
 app.use("/auth", auth);
 app.use("/student", student);
 app.use("/authority",authority);
-app.use('/admin',admin);
 app.use("/complain", complain);
 
 app.use(Verify);
