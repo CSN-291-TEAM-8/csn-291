@@ -1,5 +1,4 @@
-const Student = require("../models/student");
-const Authority = require('../models/authority');
+const db = require("../models/User");
 
 exports.login = async (req, res, next) => {
     const { email, password,isStudent } = req.body;
@@ -20,7 +19,7 @@ exports.login = async (req, res, next) => {
 
 
   // check if the user exists
-  const db = isStudent?Student:Authority;
+  
   const user = await db.findOne({ email });
 
   if (!user) {
@@ -44,8 +43,8 @@ exports.login = async (req, res, next) => {
 
 exports.signup = async (req, res, next) => {
   const { fullname, username, email, password,isStudent,hostel,institute_id } = req.body;
-  let p = isStudent?Student:Authority;
-  const user = await p.create({ fullname, username, email, password ,hostel,institute_id});
+  
+  const user = await db.create({ fullname, username, email, password ,hostel,institute_id});
 
   const token = user.getJwtToken();
 
@@ -53,12 +52,12 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.me = async (req, res, next) => {
-  const { avatar, username, fullname, email, _id, website, bio } = req.user;
+  const { avatar, username, fullname, email, _id, website, bio,hostel,institude_id } = req.user;
 
   res
     .status(200)
     .json({
       success: true,
-      data: { avatar, username, fullname, email, _id, website, bio },
+      data: { avatar, username, fullname, email, _id, website, bio,hostel,institude_id },
     });
 };

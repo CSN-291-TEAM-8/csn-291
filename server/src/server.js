@@ -2,8 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const auth = require("./routes/auth");
-const authority = require('./routes/authority');
-const student = require("./routes/student");
+const privateComplain = require('./routes/privateComplain')
+const user = require("./routes/user");
 const complain = require("./routes/complain");
 const db = require("./utils/db.config");
 const Verify = require('./middleware/auth');
@@ -15,9 +15,10 @@ db();
 app.use(express.json());
 app.use(cors());
 
-app.use("/auth", auth);
-app.use("/student", student);
-app.use("/authority",authority);
+app.use("/auth", auth);//login or signup route
+app.use("/user", user);
+//keep collections for private and public complains as different considering security
+app.use('/:id/private',privateComplain);//req.params.id
 app.use("/complain", complain);
 
 app.use(Verify);
