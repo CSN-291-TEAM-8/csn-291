@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 
-exports.verify = async (req, res, next) => {
+exports.Verify = async (req, res, next) => {
     let token;
 
     if (

@@ -1,6 +1,6 @@
 const User = require("../models/User");
-const Post = require("../models/post");
-const asyncHandler = require("../middlewares/asynchandler");
+const Post = require("../models/Post");
+const asyncHandler = require("../middleware/asynchandler");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
   let users = await User.find().select("-password").lean().exec();//select every user

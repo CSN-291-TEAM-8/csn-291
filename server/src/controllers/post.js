@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Comment = require("../models/Comment");
-const asyncHandler = require("../middlewares/asynchandler");
+const asyncHandler = require("../middleware/asynchandler");
 
 exports.getPosts = asyncHandler(async (req, res, next) => {
   const posts = await Post.find({isPrivate:false});

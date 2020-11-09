@@ -11,14 +11,14 @@ const {
   deleteComment,
   searchPost,
 } = require("../controllers/post");
-const { verify } = require("../middlewares/auth");
+const { Verify } = require("../middleware/auth");
 
-router.route("/").get(getPosts).post(verify, addPost);
+router.route("/").get(getPosts).post(Verify, addPost);
 router.route("/search").get(searchPost);
-router.route("/:id").get(verify, getPost).delete(verify, deletePost);
-router.route("/:id/togglelike").get(verify, toggleLike);
-router.route("/:id/togglesave").get(verify, toggleSave);
-router.route("/:id/comments").post(verify, addComment);
-router.route("/:id/comments/:commentId").delete(verify, deleteComment);
+router.route("/:id").get(Verify, getPost).delete(Verify, deletePost);
+router.route("/:id/togglelike").get(Verify, toggleLike);
+router.route("/:id/togglesave").get(Verify, toggleSave);
+router.route("/:id/comments").post(Verify, addComment);
+router.route("/:id/comments/:commentId").delete(Verify, deleteComment);
 
 module.exports = router;

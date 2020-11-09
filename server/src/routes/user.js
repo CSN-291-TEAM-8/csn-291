@@ -10,14 +10,14 @@ const {
   searchUser,
   editDetails,
 } = require("../controllers/user");
-const { verify } = require("../middlewares/auth");
+const { Verify } = require("../middleware/auth");
 
-router.route("/").get(verify, getUsers);
-router.route("/").put(verify, editDetails);
-router.route("/feed").get(verify, publicfeed);
+router.route("/").get(Verify, getUsers);
+router.route("/").put(Verify, editDetails);
+router.route("/feed").get(Verify, publicfeed);
 router.route("/search").get(searchUser);
-router.route("/:username").get(verify, getUser);
-router.route("/:id/friend").get(verify, friend);
-router.route("/:id/unfriend").get(verify, unfriend);
+router.route("/:username").get(Verify, getUser);
+router.route("/:id/friend").get(Verify, friend);
+router.route("/:id/unfriend").get(Verify, unfriend);
 
 module.exports = router;

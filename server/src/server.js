@@ -5,7 +5,6 @@ const auth = require("./routes/auth");
 const user = require("./routes/user");
 const complain = require("./routes/complain");
 const db = require("./utils/db.config");
-const Verify = require('./middleware/auth');
 const errorHandler = require("./middleware/errorhandle");
 
 const app = express();
@@ -22,7 +21,6 @@ app.use("/user", user);
 //app.use('/:id/private',privateComplain);//req.params.id
 app.use("/complain", complain);
 
-app.use(Verify);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5050;
