@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Comment = require("../models/Comment");
+const Notification = require("../models/Notification");
 const asyncHandler = require("../middleware/asynchandler");
 
 exports.getPosts = asyncHandler(async (req, res, next) => {
@@ -136,6 +137,12 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
     await post.save();
   }
 
+  let notification = await Notification.create({
+    user: post.user,
+    sender: "`req.user.id`",
+    notifiedMessage: "`req.user.id` has liked your post",
+  });
+
   res.status(200).json({ success: true, data: {} });
 });
 
@@ -163,6 +170,12 @@ exports.addComment = asyncHandler(async (req, res, next) => {
   post.comments.push(comment._id);
   post.commentsCount = post.commentsCount + 1;
   await post.save();
+
+  let notification = await Notification.create({
+    user: post.user,
+    sender: "`req.user.id`",
+    notifiedMessage: "`req.user.id` has commented on your post",
+  });
 
   comment = await comment
     .populate({ path: "user", select: "avatar username fullname" })
