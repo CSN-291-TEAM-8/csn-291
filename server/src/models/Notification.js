@@ -6,7 +6,7 @@ const NotifSchema = new mongoose.Schema({
         ref: "User",
         required:true,
     },
-    url{
+    url:{
         type:String,
         required:true,
     },
