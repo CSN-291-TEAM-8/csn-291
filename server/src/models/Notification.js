@@ -6,6 +6,10 @@ const NotifSchema = new mongoose.Schema({
         ref: "User",
         required:true,
     },
+    url{
+        type:String,
+        required:true,
+    },
     sender:{
         type: String,
         required: true
