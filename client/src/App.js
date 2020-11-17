@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
+import GlobalStyle from "./style/GlobalStyle";
+import Auth from "./components/auth/auth";
+import Routing from "./Routing";
+import { UserContext } from "./context/UserContext";
+import { ThemeContext } from "./context/ThemeContext";
 
-function App() {
+const App = () => {
+  const { user } = useContext(UserContext);
+  const { theme } = useContext(ThemeContext);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StyledThemeProvider theme={theme}>
+      <GlobalStyle />
+      <ToastContainer autoClose={2000} closeButton={false} />
+      {user ? <Routing /> : <Auth />}
+    </StyledThemeProvider>
   );
-}
+};
 
 export default App;

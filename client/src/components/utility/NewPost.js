@@ -41,7 +41,7 @@ const NewPostWrapper = styled.div`
   }
 `;
 
-const createNew = () => {
+const NewPost = () => {
   const { feed, setFeed } = useContext(FeedContext);
   const [showModal, setShowModal] = useState(false);
   const caption = modify("");
@@ -49,7 +49,7 @@ const createNew = () => {
   const [postImage, setPostImage] = useState("");
 
   const handleUploadImage = (e) => {
-    if (e.target.files[0]&&e.target.files[0].type.split('/')[0]=='image') {
+    if (e.target.files[0]) {
       const reader = new FileReader();
 
       reader.onload = (e) => {
@@ -135,4 +135,4 @@ const createNew = () => {
   );
 };
 
-export default createNew;
+export default NewPost;
