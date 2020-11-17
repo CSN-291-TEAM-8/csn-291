@@ -139,6 +139,7 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
 
   let notification = await Notification.create({
     user: post.user,
+    url:"/p/`req.params.id`",
     sender: "`req.user.id`",
     notifiedMessage: "`req.user.id` has liked your post",
   });
@@ -173,6 +174,7 @@ exports.addComment = asyncHandler(async (req, res, next) => {
 
   let notification = await Notification.create({
     user: post.user,
+    url:"/p/`req.params.id`",
     sender: "`req.user.id`",
     notifiedMessage: "`req.user.id` has commented on your post",
   });
