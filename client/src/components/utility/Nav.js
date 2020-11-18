@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import NewPost from "./NewPost";
-import Search from "./search";
+import Search from "./Search";
 import { UserContext } from "../../context/UserContext";
 import navlogo from "../../assets/navlogo.png";
-import { HomeIcon, Highlighticon, HeartIcon } from "../../Icons";
+import { HomeIcon, HighlightIcon, HeartIcon } from "../../Icons";
 
 const NavWrapper = styled.div`
   position: fixed;
@@ -68,11 +68,11 @@ const Nav = () => {
           </li>
           <li>
             <Link to="/highlight">
-              <Highlighticon />
+              <HighlightIcon />
             </Link>
           </li>          
           <li>
-          <Link to="/accounts/notice">
+          <Link to="/accounts/notifications">
             <HeartIcon />
             </Link>
           </li>

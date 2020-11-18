@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import Modal from "../posts/Modal";
-import Modify from "../../hooks/Modify";
+import modify from "../../hooks/Modify";
 import { FeedContext } from "../../context/FeedContext";
 import { connect, uploadImage } from "../../utils/fetchdata";
 import { NewPostIcon } from "../../Icons";
@@ -41,21 +41,29 @@ const NewPostWrapper = styled.div`
   }
 `;
 
-const NewPost = () => {
+const CreateNew = () => {
   const { feed, setFeed } = useContext(FeedContext);
   const [showModal, setShowModal] = useState(false);
-  const caption = Modify("");
+  const caption = modify("");
   const [preview, setPreview] = useState("");
   const [postImage, setPostImage] = useState("");
 
   const handleUploadImage = (e) => {
-    if (e.target.files[0]&&e.target.files[0].type.split('/')[0]=='image') {      
-        setPreview(URL.createObjectURL(e.target.files[0]));
-        setShowModal(true);     
+    if (e.target.files[0] && e.target.files[0].type.split('/')[0] == 'image') {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        setPreview(e.target.result);
+        setShowModal(true);
+      };
+      reader.readAsDataURL(e.target.files[0]);
 
       uploadImage(e.target.files[0]).then((res) => {
         setPostImage(res.secure_url);
       });
+    }
+    else {
+      toast.error("Kindly upload a valid image file");
     }
   };
 
@@ -83,6 +91,7 @@ const NewPost = () => {
       tags,
     };
 
+
     connect(`/complain`, { body: newPost }).then((res) => {
       const post = res.data;
       post.isLiked = false;
@@ -90,7 +99,7 @@ const NewPost = () => {
       post.isMine = true;
       setFeed([post, ...feed]);
       window.scrollTo(0, 0);
-      toast.success("Your post has been submitted successfully");
+      toast.success("Your complain has been submitted successfully");
     });
   };
 
@@ -130,4 +139,4 @@ const NewPost = () => {
   );
 };
 
-export default NewPost;
+export default CreateNew;

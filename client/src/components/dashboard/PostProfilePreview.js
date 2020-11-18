@@ -88,7 +88,7 @@ const Wrapper = styled.div`
 	}
 `;
 
-const ProfilePreview = ({ posts }) => {
+const PostProfilePreview = ({ posts }) => {
   const history = useHistory();
 
   return (
@@ -116,4 +116,4 @@ const ProfilePreview = ({ posts }) => {
   );
 };
 
-export default ProfilePreview;
+export default PostProfilePreview;

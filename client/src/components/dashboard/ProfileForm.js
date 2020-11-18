@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import Button from "../../styles/Button";
 import Avatar from "../../styles/Avatar";
-import modify from "../../hooks/modify";
+import modify from "../../hooks/Modify";
 import { UserContext } from "../../context/UserContext";
 import { uploadImage,connect} from "../../utils/fetchdata";
 
@@ -109,10 +109,10 @@ const ProfileForm = () => {
       avatar: newAvatar || user.avatar,
     };
 
-    connect("/users", { method: "PUT", body })
+    connect("/user", { method: "PUT", body })
       .then((res) => {
         setUser(res.data);
-        localStorage.setItem("user", JSON.stringify(res.data));
+        localStorage.setItem("userdetail", JSON.stringify(res.data));
         history.push(`/${body.username || user.username}`);
       })
       .catch((err) => toast.error(err.message));
@@ -168,7 +168,7 @@ const ProfileForm = () => {
             onChange={username.onChange}
           />
         </div>
-
+        
         <div className="input-group">
           <label className="bold">Website</label>
           <input

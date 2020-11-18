@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import LikePost from "./LikePost";
-import SavePost from "./savedPost";
-import Comment from "./comment";
+import SavedComplaints from "./SavedComplaints";
+import Comment from "./Comment";
 import DeletePost from "./DeletePost";
 import Modal from "./Modal";
-import Modify from "../../hooks/modify";
+import Modify from "../../hooks/Modify";
 import Avatar from "../../styles/Avatar";
 import { connect ,timeSince} from "../../utils/fetchdata";
 import { MoreIcon, CommentIcon, InboxIcon } from "../../Icons";
@@ -106,7 +106,7 @@ export const PostWrapper = styled.div`
   }
 `;
 
-const Post = ({ post }) => {
+const PostComponents = ({ post }) => {
   const comment = Modify("");
   const history = useHistory();
 
@@ -123,7 +123,7 @@ const Post = ({ post }) => {
     if (e.keyCode === 13) {
       e.preventDefault();
 
-      connect(`/posts/${post._id}/comments`, {
+      connect(`/complain/${post._id}/comments`, {
         body: { text: comment.value },
       }).then((resp) => setNewComments([...newComments, resp.data]));
 
@@ -172,7 +172,7 @@ const Post = ({ post }) => {
         />
         <CommentIcon onClick={() => history.push(`/p/${post._id}`)} />
         <InboxIcon />
-        <SavePost isSaved={post.isSaved} postId={post._id} />
+        <SavedComplaints isSaved={post.isSaved} postId={post._id} />
       </div>
 
       <div className="likes-caption-comments">
@@ -225,4 +225,4 @@ const Post = ({ post }) => {
   );
 };
 
-export default Post;
+export default PostComponents;

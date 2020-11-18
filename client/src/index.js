@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './style/index.css';
+//import './style/index.css';
 import App from './App';
+import { UserProvider } from "./context/UserContext";
+import { FeedProvider } from "./context/FeedContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  <UserProvider>
+  <FeedProvider>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  </FeedProvider>
+</UserProvider>,
+document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

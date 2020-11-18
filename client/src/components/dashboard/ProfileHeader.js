@@ -197,8 +197,7 @@ const ProfileHeader = ({ profile }) => {
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    localStorage.clear();
     toast.success("You are logged out");
   };
 

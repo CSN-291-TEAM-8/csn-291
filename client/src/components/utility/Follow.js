@@ -13,13 +13,13 @@ const Follow = ({ nobtn, isFollowing, incFollowers, decFollowers, userId }) => {
       if (decFollowers) {
         decFollowers();
       }
-      connect(`/users/${userId}/unfriend`);
+      connect(`/user/${userId}/unfollow`);
     } else {
       setFollowingState(true);
       if (incFollowers) {
         incFollowers();
       }
-      connect(`/users/${userId}/friend`);
+      connect(`/user/${userId}/follow`);
     }
   };
 

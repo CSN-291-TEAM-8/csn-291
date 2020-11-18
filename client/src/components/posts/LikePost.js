@@ -13,11 +13,11 @@ const LikePost = ({ isLiked, postId, incLikes, decLikes }) => {
     if (likedState) {
       setLiked(false);
       decLikes();
-      connect(`/posts/${postId}/toggleLike`);
+      connect(`/complain/${postId}/toggleLike`);
     } else {
       setLiked(true);
       incLikes();
-      connect(`/posts/${postId}/toggleLike`);
+      connect(`/complain/${postId}/toggleLike`);
     }
   };
 

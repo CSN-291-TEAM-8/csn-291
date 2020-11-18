@@ -16,8 +16,8 @@ const DeletePost = ({ postId, closeModal, goToHome }) => {
     }
 
     setFeed(feed.filter((post) => post._id !== postId));
-    toast.success("Your post has been deleted successfully");
-    connect(`/posts/${postId}`, { method: "DELETE" });
+    toast.success("Your complain has been deleted successfully");
+    connect(`/complain/${postId}`, { method: "DELETE" });
   };
 
   return (
