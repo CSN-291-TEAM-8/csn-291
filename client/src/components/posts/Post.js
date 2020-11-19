@@ -131,7 +131,7 @@ const Post = () => {
         setLoading(false);
         setnotFound(false);
       })
-      .catch((err) => {setErr(err.message);setnotFound(true)});
+      .catch((err) => {setErr("This complain post is non-accessible");setnotFound(true)});
   }, [postId]);
 
   if (!notFound && loading) {
@@ -142,7 +142,7 @@ const Post = () => {
     return (
       <Placeholder
         title="Sorry, this page isn't available"
-        text={{err}}
+        text={err}
       />
     );
   }

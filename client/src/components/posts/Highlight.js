@@ -11,6 +11,10 @@ const Highlight = () => {
     connect("/complain/highlight").then((res) => {
       setPosts(res.data);
       setLoading(false);
+    }).catch(err=>{
+      if(!err.success){
+        window.location.assign('/');
+      }
     });
   }, []);
 

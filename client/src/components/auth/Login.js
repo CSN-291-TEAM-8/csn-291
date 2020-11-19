@@ -24,8 +24,10 @@ export const FormWrapper = styled.div`
   margin-right: 250px;
   text-align: center;
   padding: 2rem 0;
+
   float:right;
-  animation: ${FormStyle} 1s linear;
+  animation: ${FormStyle} 1s linear;  
+
   img {
     margin-bottom: 1.5rem;
   }
@@ -34,6 +36,7 @@ export const FormWrapper = styled.div`
     margin: 0 auto;
     margin-bottom: 1rem;
     padding: 0.5rem 1.2rem;
+    color: ${(props) => props.theme.primaryColor};
     background: ${(props) => props.theme.white};
     border: 1px solid ${(props) => props.theme.borderColor};
     font-family: "Fira Sans", sans-serif;
@@ -90,8 +93,10 @@ const Login = ({ signup }) => {
     if (!email.value || !password.value) {
       return toast.error("Please fill in both the fields");
     }
-
-    const body = { email: email.value, password: password.value };
+    if(!email.value.includes("iitr.ac.in")){
+      return toast.error("Kindly use your institute email id")
+    }
+    const body = { email: email.value, password: password.value,isStudent:true };
 
     try {
       const { token } = await connect("/auth/login", { body });
@@ -100,11 +105,11 @@ const Login = ({ signup }) => {
       return toast.error(err.message);
     }
 
-    const user = await connect("/auth/me");
+    const user = await connect("/auth");
     localStorage.setItem("userdetail", JSON.stringify(user.data));
     setUser(user.data);
     toast.success("Login successful");
-
+    window.location.reload();
     email.setValue("");
     password.setValue("");
   };

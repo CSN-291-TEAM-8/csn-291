@@ -7,6 +7,7 @@ export const lightTheme = {
     white: "#FFF",
     borderColor: "#DBDBDB",
     borderRadius: "4px",
+    inputBg:"#AAAAAA",
   };
   export const darkTheme = {
     primaryColor: "#DADADA",
@@ -14,7 +15,8 @@ export const lightTheme = {
     bg: "#030303",
     blue: "#0095F6",
     red: "#ED4956",
-    white: "#FFF",
+    white: "#111",
+    inputBg:"#333333",
     borderColor: "#242424",
     borderRadius: "4px",
   };

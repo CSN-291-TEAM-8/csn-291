@@ -10,6 +10,17 @@ const GlobalStyle = createGlobalStyle`
 		margin: 0;
 		box-sizing: inherit;
 	}
+	textarea{
+		color: ${(props) => props.theme.primaryColor};
+		background: ${(props) => props.theme.bg};
+		height:50px !important;
+		position:absolute;
+		border:1px solid ${(props) => props.theme.primaryColor} !important;
+		bottom:0px;
+	}
+	.modal-content:first-child{
+		border:1px solid ${(props) => props.theme.primaryColor} !important;
+	}
 	body {
 		font-family: 'Fira Sans', sans-serif;
 		font-size: 1rem;

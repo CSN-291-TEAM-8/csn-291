@@ -3,10 +3,10 @@ import React, { useState, createContext } from "react";
 export const FeedContext = createContext(null);
 
 export const FeedProvider = ({ children }) => {
-  const [post, setpost] = useState([]);
+  const [feed, setFeed] = useState([]);
 
   return (
-    <FeedContext.Provider value={{ post, setpost }}>
+    <FeedContext.Provider value={{ feed, setFeed }}>
       {children}
     </FeedContext.Provider>
   );

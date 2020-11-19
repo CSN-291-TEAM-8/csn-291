@@ -41,7 +41,7 @@ const NewPostWrapper = styled.div`
   }
 `;
 
-const NewPost = () => {
+const NewPost = (props) => {
   const { feed, setFeed } = useContext(FeedContext);
   const [showModal, setShowModal] = useState(false);
   const caption = Modify("");
@@ -80,6 +80,7 @@ const NewPost = () => {
     const newPost = {
       caption: cleanedCaption,
       files: [postImage],
+      isPrivate:false,
       tags,
     };
 
@@ -97,7 +98,7 @@ const NewPost = () => {
   return (
     <NewPostWrapper>
       <label htmlFor="upload-post">
-        <NewPostIcon />
+        <NewPostIcon fill={props.theme.primaryColor}/>
       </label>
       <input
         id="upload-post"
@@ -111,12 +112,12 @@ const NewPost = () => {
           <div className="modal-content">
             <div className="newpost-header">
               <h3 onClick={() => setShowModal(false)}>Cancel</h3>
-              <h3 onClick={handleSubmitPost}>Share</h3>
+              <h3 onClick={handleSubmitPost}>Post</h3>
             </div>
             {preview && (
               <img className="post-preview" src={preview} alt="preview" />
             )}
-            <div>
+            <div style={{position:"sticky",bottom:"0px"}}>
               <textarea
                 placeholder="Add caption"
                 value={caption.value}
