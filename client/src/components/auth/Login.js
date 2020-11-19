@@ -19,9 +19,11 @@ export const FormWrapper = styled.div`
   padding: 1rem;
   width: 350px;
   border: 1px solid ${(props) => props.theme.borderColor};
-  margin: 6rem auto;
+  margin: 10rem auto;
+  margin-right: 250px;
   text-align: center;
   padding: 2rem 0;
+  float:right;
   animation: ${FormStyle} 1s linear;
   img {
     margin-bottom: 1.5rem;
@@ -62,6 +64,18 @@ export const FormWrapper = styled.div`
     cursor: pointer;
   }
 `;
+export const TitleInfo = styled.div`
+  float:left;
+  .intro{
+  margin-top:15rem;
+  margin-left:150px;
+  font-size:20px;
+  }
+  h1{
+    font-weight:bold;
+    color: ${(props) => props.theme.blue};
+  }
+`;
 
 const Login = ({ signup }) => {
   const { setUser } = useContext(UserContext);
@@ -94,6 +108,13 @@ const Login = ({ signup }) => {
   };
 
   return (
+    <div>
+      <TitleInfo>
+        <div className="intro">
+        <h1>Complain Lodger</h1>
+        <p>The place where everyone comes with hope of resolving their complains</p>
+        </div>
+      </TitleInfo>
     <FormWrapper onSubmit={handleLogin}>
       <img className="logo" src={logo} alt="logo" />
       <h2 className="info">Login to view all complaints lodged!</h2>
@@ -119,6 +140,7 @@ const Login = ({ signup }) => {
         </p>
       </div>
     </FormWrapper>
+    </div>
   );
 };
 
