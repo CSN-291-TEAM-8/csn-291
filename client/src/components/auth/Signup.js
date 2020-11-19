@@ -2,8 +2,10 @@ import React, { useContext,useState } from "react";
 import { toast } from "react-toastify";
 import { connect } from "../../utils/fetchdata";
 import { FormWrapper } from "./Login";
+import {TitleInfo} from "./Login";
 import modify from "../../hooks/Modify";
 import { UserContext } from "../../context/UserContext";
+import "../../style/loginpage.css";
 
 import logo from "../../assets/navlogo.png";
 
@@ -108,6 +110,13 @@ const Signup = ({ login }) => {
   };
 
   return (
+    <div>
+      <TitleInfo>
+        <div className="intro">
+        <h1>Complain Lodger</h1>
+        <p>The place where everyone comes with hope of resolving their complains</p>
+        </div>
+      </TitleInfo>
     <FormWrapper onSubmit={handleLogin}>
       <img src={logo} className="logo" alt="logo" />
       <h2 className="info">Create an account to resolve your complaints easily!</h2>
@@ -166,6 +175,12 @@ const Signup = ({ login }) => {
         </p>
       </div>
     </FormWrapper>
+    <div>
+      <p className="footer">
+        Created By Team 8
+      </p>
+      </div>
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ import { connect } from "../../utils/fetchdata";
 import useInput from "../../hooks/Modify";
 import { UserContext } from "../../context/UserContext";
 import logo from "../../assets/navlogo.png";
+import "../../style/loginpage.css";
 
 const FormStyle = keyframes`
 from{
@@ -19,10 +20,14 @@ export const FormWrapper = styled.div`
   padding: 1rem;
   width: 350px;
   border: 1px solid ${(props) => props.theme.borderColor};
-  margin: 6rem auto;
+  margin: 10rem auto;
+  margin-right: 250px;
   text-align: center;
   padding: 2rem 0;
-  animation: ${FormStyle} 0.7s ease-out;
+
+  float:right;
+  animation: ${FormStyle} 1s linear;  
+
   img {
     margin-bottom: 1.5rem;
   }
@@ -57,10 +62,23 @@ export const FormWrapper = styled.div`
     font-size:17px;
     margin-bottom:12px;
     font-weight:bold;
+    padding: 2px;
   }
   span {
     color: ${(props) => props.theme.blue};
     cursor: pointer;
+  }
+`;
+export const TitleInfo = styled.div`
+  float:left;
+  .intro{
+  margin-top:15rem;
+  margin-left:150px;
+  font-size:20px;
+  }
+  h1{
+    font-weight:bold;
+    color: ${(props) => props.theme.blue};
   }
 `;
 
@@ -97,6 +115,13 @@ const Login = ({ signup }) => {
   };
 
   return (
+    <div>
+      <TitleInfo>
+        <div className="intro">
+        <h1>Complain Lodger</h1>
+        <p>The place where everyone comes with hope of resolving their complains</p>
+        </div>
+      </TitleInfo>
     <FormWrapper onSubmit={handleLogin}>
       <img className="logo" src={logo} alt="logo" />
       <h2 className="info">Login to view all complaints lodged!</h2>
@@ -122,6 +147,12 @@ const Login = ({ signup }) => {
         </p>
       </div>
     </FormWrapper>
+    <div>
+      <p className="footer">
+        Created By Team 8
+      </p>
+      </div>
+    </div>
   );
 };
 
