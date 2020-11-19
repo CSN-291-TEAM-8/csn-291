@@ -1,11 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext} from "react";
 import { toast } from "react-toastify";
-import styled from "styled-components";
+import styled ,{keyframes} from "styled-components";
 import { connect } from "../../utils/fetchdata";
 import useInput from "../../hooks/Modify";
 import { UserContext } from "../../context/UserContext";
 import logo from "../../assets/navlogo.png";
 
+const FormStyle = keyframes`
+from{
+  transform:scale(-1,1);
+}
+to{
+  transform:scale(1,1);
+}
+`;
 export const FormWrapper = styled.div`
   background-color: ${(props) => props.theme.white};
   padding: 1rem;
@@ -14,6 +22,7 @@ export const FormWrapper = styled.div`
   margin: 6rem auto;
   text-align: center;
   padding: 2rem 0;
+  animation: ${FormStyle} 1s linear;
   img {
     margin-bottom: 1.5rem;
   }
