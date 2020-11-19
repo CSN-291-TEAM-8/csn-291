@@ -6,7 +6,8 @@ import Modify from "../../hooks/Modify";
 
 const InputWrapper = styled.input`
   padding: 0.4rem 0.6rem;
-  background: ${(props) => props.theme.bg};
+  background: ${(props) => props.theme.inputBg};
+  color: ${(props) => props.theme.primaryColor};
   border: 1px solid ${(props) => props.theme.borderColor};
   font-family: "Fira Sans", sans-serif;
   font-size: 1rem;

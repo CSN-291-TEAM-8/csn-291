@@ -84,6 +84,9 @@ const Signup = ({ login }) => {
       username: username.value,
       fullname: fullname.value,
       OTP:OTP.value,
+      isStudent:true,
+      hostel:"Ravindra bhawan",
+      institute_id:"19114042",
     };
 
     try {
@@ -93,7 +96,7 @@ const Signup = ({ login }) => {
       return toast.error(err.message);
     }
 
-    const user = await connect("/auth/me");
+    const user = await connect("/auth");
     setUser(user.data);
     localStorage.setItem("userdetail", JSON.stringify(user.data));
 
@@ -136,7 +139,7 @@ const Signup = ({ login }) => {
         {OTPB&&
         <input
           type="button"
-          style={{background:"#00FF10",cursor:"pointer"}}
+          style={{background:"#00FF10",fontWeight:"bold",color:"#000000",cursor:"pointer"}}
           value="Request OTP"
           onClick={OTPclick}         
         />

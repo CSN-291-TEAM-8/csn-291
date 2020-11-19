@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { ThemeContext } from "../../context/ThemeContext";
 import NewPost from "./NewPost";
 import Search from "./Search";
 import { UserContext } from "../../context/UserContext";
 import navlogo from "../../assets/navlogo.png";
-import { HomeIcon, HighlightIcon, HeartIcon } from "../../Icons";
+import { HomeIcon, HighlightIcon, BellIcon } from "../../Icons";
 
 const NavWrapper = styled.div`
   position: fixed;
@@ -35,6 +36,9 @@ const NavWrapper = styled.div`
   li {
     margin-left: 1rem;
   }
+  .nav-logo{
+    width:200px;
+  }
   @media screen and (max-width: 970px) {
     nav {
       width: 90%;
@@ -49,6 +53,7 @@ const NavWrapper = styled.div`
 
 const Nav = () => {
   const { user } = useContext(UserContext);
+  const {theme} = useContext(ThemeContext);
 
   return (
     <NavWrapper>
@@ -57,23 +62,23 @@ const Nav = () => {
           <img className="nav-logo" src={navlogo} alt="logo" />
         </Link>
         <Search />
-        <ul>
+        <ul style={{display:"flex",alignItems:"center"}}>
           <li>
             <Link to="/">
-              <HomeIcon />
+              <HomeIcon theme={theme}/>
             </Link>
           </li>
           <li>
-            <NewPost />
+            <NewPost theme={theme}/>
           </li>
           <li>
             <Link to="/highlight">
-              <HighlightIcon />
+              <HighlightIcon theme={theme}/>
             </Link>
           </li>          
           <li>
           <Link to="/accounts/notifications">
-            <HeartIcon />
+            <BellIcon theme={theme}/>
             </Link>
           </li>
           <li>

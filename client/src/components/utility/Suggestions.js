@@ -87,7 +87,7 @@ const Suggestions = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    connect("/users").then((response) => {
+    connect("/user").then((response) => {
       setUsers(response.data.filter((user) => !user.isFollowing));
     });
   }, []);

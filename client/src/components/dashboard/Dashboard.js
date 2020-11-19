@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import styled from "styled-components";
+import {ThemeContext} from "../../context/ThemeContext";
 import { useParams } from "react-router-dom";
 import PostProfilePreview from "./PostProfilePreview";
 import ProfileHeader from "./ProfileHeader";
@@ -35,6 +36,7 @@ const Wrapper = styled.div`
 const Dashboard = () => {
   const [tab, setTab] = useState("POSTS");
   const [errmsg,setErr] = useState("Error in getting data");
+  const {theme} = useContext(ThemeContext);
   const { username } = useParams();
   const [dashboard, setdashboard] = useState({});
   const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ const Dashboard = () => {
     return (
       <Placeholder
         title="Sorry, this page isn't available"
-        text={{errmsg}}
+        text={errmsg}
       />
     );
   }
@@ -74,7 +76,7 @@ const Dashboard = () => {
           style={{ fontWeight: tab === "POSTS" ? "500" : "" }}
           onClick={() => setTab("POSTS")}
         >
-          <PostIcon />
+          <PostIcon theme={theme} />
           <span>Posts</span>
         </div>
         <div
