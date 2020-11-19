@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { connect } from "../../utils/fetchdata";
 import useInput from "../../hooks/Modify";
 import { UserContext } from "../../context/UserContext";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/navlogo.png";
 
 export const FormWrapper = styled.div`
   background-color: ${(props) => props.theme.white};
@@ -36,7 +36,7 @@ export const FormWrapper = styled.div`
     cursor: pointer;
   }
   .logo{
-    width:100px;
+    width:200px;
     height:auto;
     margin-bottom:0.3rem;
   }

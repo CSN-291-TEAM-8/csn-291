@@ -5,7 +5,7 @@ import { FormWrapper } from "./Login";
 import modify from "../../hooks/Modify";
 import { UserContext } from "../../context/UserContext";
 
-import logo from "../../assets/logo.png";
+import logo from "../../assets/navlogo.png";
 const Signup = ({ login }) => {
   const { setUser } = useContext(UserContext);
   const email = modify("");
