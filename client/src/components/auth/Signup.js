@@ -5,6 +5,7 @@ import { FormWrapper } from "./Login";
 import {TitleInfo} from "./Login";
 import modify from "../../hooks/Modify";
 import { UserContext } from "../../context/UserContext";
+import "../../style/loginpage.css";
 
 import logo from "../../assets/navlogo.png";
 const Signup = ({ login }) => {
@@ -118,6 +119,11 @@ const Signup = ({ login }) => {
         </p>
       </div>
     </FormWrapper>
+    <div>
+      <p className="footer">
+        Created By Team 8
+      </p>
+      </div>
     </div>
   );
 };

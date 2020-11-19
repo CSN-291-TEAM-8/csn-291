@@ -5,6 +5,7 @@ import { connect } from "../../utils/fetchdata";
 import useInput from "../../hooks/Modify";
 import { UserContext } from "../../context/UserContext";
 import logo from "../../assets/navlogo.png";
+import "../../style/loginpage.css";
 
 const FormStyle = keyframes`
 from{
@@ -58,6 +59,7 @@ export const FormWrapper = styled.div`
     font-size:17px;
     margin-bottom:12px;
     font-weight:bold;
+    padding: 2px;
   }
   span {
     color: ${(props) => props.theme.blue};
@@ -140,6 +142,11 @@ const Login = ({ signup }) => {
         </p>
       </div>
     </FormWrapper>
+    <div>
+      <p className="footer">
+        Created By Team 8
+      </p>
+      </div>
     </div>
   );
 };
