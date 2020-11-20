@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const Userdb = require("../models/User");
 
 
 exports.Verify = async (req, res, next) => {
@@ -20,9 +20,10 @@ exports.Verify = async (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);        
-        const User = await User.findById(decoded.id).select("-password");
-
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(decoded);        
+        const User = await Userdb.findById(decoded.id).select("-password");
+        console.log('\nuser',User);
             if (!User) {
                 return next({ message: `No User found for ID ${decoded.id}` });
             }
@@ -31,7 +32,7 @@ exports.Verify = async (req, res, next) => {
             next();        
     } catch (err) {
         next({
-            message: "You need to be logged in to visit this route",//redirect to login on frontend
+            message: err.message,//redirect to login on frontend
             statusCode: 403,
         });
     }

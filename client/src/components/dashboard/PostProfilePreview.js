@@ -1,4 +1,5 @@
-import React from "react";
+import React,{useContext} from "react";
+import {ThemeContext} from "../../context/ThemeContext";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { HeartIcon, CommentIcon } from "../../Icons";
@@ -90,6 +91,7 @@ const Wrapper = styled.div`
 
 const PostProfilePreview = ({ posts }) => {
   const history = useHistory();
+  const {theme} = useContext(ThemeContext);
 
   return (
     <Wrapper>
@@ -103,10 +105,10 @@ const PostProfilePreview = ({ posts }) => {
           <div className="overlay">
             <div className="overlay-content">
               <span>
-                <HeartIcon /> {post.likesCount}
+                <HeartIcon theme={theme}/> {post.likesCount}
               </span>
               <span>
-                <CommentIcon /> {post.commentsCount}
+                <CommentIcon theme={theme}/> {post.commentsCount}
               </span>
             </div>
           </div>

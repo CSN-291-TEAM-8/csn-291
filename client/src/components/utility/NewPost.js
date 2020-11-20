@@ -23,12 +23,13 @@ const NewPostWrapper = styled.div`
     color: ${(props) => props.theme.blue};
   }
   textarea {
-    height: 100%;
-    width: 100%;
+    height:50px !important;
+    width:100%;
+		position:absolute;
+		bottom:0px;
     font-family: "Fira Sans", sans-serif;
     font-size: 1rem;
-    padding: 0.5rem 1rem;
-    border: none;
+    padding: 0.5rem 1rem;    
     resize: none;
   }
   .modal-content {
@@ -56,6 +57,9 @@ const NewPost = (props) => {
       uploadImage(e.target.files[0]).then((res) => {
         setPostImage(res.secure_url);
       });
+    }
+    else{
+      return toast.error('Please upload a valid image file');
     }
   };
 

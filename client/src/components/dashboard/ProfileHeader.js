@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {ThemeContext} from "../../context/ThemeContext";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import Follow from "../utility/Follow";
@@ -141,12 +142,12 @@ const ModalContentWrapper = styled.div`
 
 const ModalContent = ({ loggedInUser, users, closeModal, title }) => {
   const history = useHistory();
-
+  const {theme} = useContext(ThemeContext);
   return (
     <div style={{ maxHeight: "400px", overflowY: "auto" }}>
       <div style={modalHeaderStyle}>
         <h3>{title}</h3>
-        <CloseIcon onClick={closeModal} />
+        <CloseIcon onClick={closeModal} theme={theme} />
       </div>
       {users.map((user) => (
         <ModalContentWrapper key={user._id}>
@@ -183,7 +184,7 @@ const ModalContent = ({ loggedInUser, users, closeModal, title }) => {
 const ProfileHeader = ({ profile }) => {
   const history = useHistory();
   const { user, setUser } = useContext(UserContext);
-
+  const {theme} = useContext(ThemeContext);
   const [showFollowersModal, setFollowersModal] = useState(false);
   const [showFollowingModal, setFollowingModal] = useState(false);
   const closeModal = () => {
@@ -218,7 +219,7 @@ const ProfileHeader = ({ profile }) => {
                 >
                   Edit Profile
                 </Button>
-                <OptionsIcon onClick={handleLogout} />
+                <OptionsIcon onClick={handleLogout} theme={theme}/>
               </div>
             ) : (
               <Follow

@@ -1,6 +1,7 @@
-import React from "react";
-import styled from "styled-components";
+import React,{useContext} from "react";
+import styled, { ThemeContext } from "styled-components";
 import { BookmarkIcon, PostIcon } from "../../Icons";
+import {FeedContext} from "../../context/FeedContext";
 
 const Wrapper = styled.div`
   margin: auto;
@@ -25,10 +26,11 @@ const Wrapper = styled.div`
 `;
 
 const Placeholder = ({ icon, title, text }) => {
+  const {theme} = useContext(ThemeContext);
   return (
     <Wrapper>
-      {icon === "bookmark" && <BookmarkIcon />}
-      {icon === "post" && <PostIcon />}
+      {icon === "bookmark" && <BookmarkIcon theme={theme} />}
+      {icon === "post" && <PostIcon theme={theme} />}
       <h2>{title}</h2>
       <p>{text}</p>
     </Wrapper>

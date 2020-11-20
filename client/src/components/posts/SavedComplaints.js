@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { connect } from "../../utils/fetchdata";
 import { BookmarkIcon, FilledBookmarkIcon } from "../../Icons";
+import {ThemeContext} from "../../context/ThemeContext";
 
 const SavedComplaints = ({ isSaved, postId }) => {
   const [savedState, setSaved] = useState(isSaved);
-
+  const {theme} = useContext(ThemeContext);
   useEffect(() => {
     setSaved(isSaved);
   }, [isSaved]);
@@ -20,11 +21,11 @@ const SavedComplaints = ({ isSaved, postId }) => {
   };
 
   if (savedState) {
-    return <FilledBookmarkIcon onClick={handleToggleSave} />;
+    return <FilledBookmarkIcon theme={theme} onClick={handleToggleSave} />;
   }
 
   if (!savedState) {
-    return <BookmarkIcon onClick={handleToggleSave} />;
+    return <BookmarkIcon theme={theme} onClick={handleToggleSave} />;
   }
 };
 

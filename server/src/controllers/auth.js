@@ -43,7 +43,13 @@ exports.login = async (req, res, next) => {
 
 exports.signup = async (req, res, next) => {
   const { fullname, username, email, password,isStudent,hostel,institute_id } = req.body;
-  
+  const usercheck = await db.findOne({ email });
+  if(usercheck){
+    return next({
+      message: "This email is already registered to an accout",
+      statusCode: 400,
+    });
+  }
   const user = await db.create({ fullname, username, email, password ,hostel,institute_id});
 
   const token = user.getJwtToken();

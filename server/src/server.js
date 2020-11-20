@@ -23,7 +23,7 @@ app.use("/complain", complain);
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 55000;
 app.listen(
   PORT,
   console.log(`server started in ${process.env.NODE_ENV} mode at port ${PORT}`)

@@ -132,16 +132,14 @@ exports.publicfeed = asyncHandler(async (req, res, next) => {
 
   const postIds = users.map((user) => user.posts).flat();
 
-  const posts = await Post.find()
+  const posts = await Post.find({isPrivate:false})
     .populate({
       path: "comments",
       select: "text",
       populate: { path: "user", select: "avatar fullname username" },
     })
     .populate({ path: "user", select: "avatar fullname username" })
-    .sort("-createdAt")
-    .where("_id")
-    .in(postIds)
+    .sort("-createdAt")    
     .lean()
     .exec();
 

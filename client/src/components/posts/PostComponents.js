@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import LikePost from "./LikePost";
@@ -9,6 +9,7 @@ import Modal from "./Modal";
 import Modify from "../../hooks/Modify";
 import Avatar from "../../styles/Avatar";
 import { connect ,timeSince} from "../../utils/fetchdata";
+import {ThemeContext} from "../../context/ThemeContext";
 import { MoreIcon, CommentIcon, InboxIcon } from "../../Icons";
 
 const ModalContentWrapper = styled.div`
@@ -28,8 +29,7 @@ const ModalContentWrapper = styled.div`
 `;
 
 export const ModalContent = ({ hideGotoPost, postId, closeModal }) => {
-  const history = useHistory();
-
+  const history = useHistory();  
   const handleGoToPost = () => {
     closeModal();
     history.push(`/p/${postId}`);
@@ -109,7 +109,7 @@ export const PostWrapper = styled.div`
 const PostComponents = ({ post }) => {
   const comment = Modify("");
   const history = useHistory();
-
+  const {theme} = useContext(ThemeContext);
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
 
@@ -154,7 +154,7 @@ const PostComponents = ({ post }) => {
             <ModalContent postId={post._id} closeModal={closeModal} />
           </Modal>
         )}
-        {post.isMine && <MoreIcon onClick={() => setShowModal(true)} />}
+        {post.isMine && <MoreIcon theme={theme} onClick={() => setShowModal(true)} />}
       </div>
 
       <img
@@ -170,8 +170,8 @@ const PostComponents = ({ post }) => {
           incLikes={incLikes}
           decLikes={decLikes}
         />
-        <CommentIcon onClick={() => history.push(`/p/${post._id}`)} />
-        <InboxIcon />
+        <CommentIcon theme={theme} onClick={() => history.push(`/p/${post._id}`)} />
+        <InboxIcon theme={theme} />
         <SavedComplaints isSaved={post.isSaved} postId={post._id} />
       </div>
 

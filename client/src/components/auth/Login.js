@@ -15,18 +15,46 @@ to{
   transform:scale(1,1);
 }
 `;
+const IntroText = keyframes`
+ from{
+   opacity:0;
+ }
+ to{
+   opacity:1;
+ }
+`;
 export const FormWrapper = styled.div`
   background-color: ${(props) => props.theme.white};
   padding: 1rem;
   width: 350px;
+  
   border: 1px solid ${(props) => props.theme.borderColor};
   margin: 10rem auto;
-  margin-right: 250px;
+  margin-bottom:10px;
+  margin-right: 5%;
   text-align: center;
   padding: 2rem 0;
 
   float:right;
-  animation: ${FormStyle} 1s linear;  
+  animation: ${FormStyle} 1s linear;
+  @media (max-width:1120px){
+    width:350px;
+    margin-left:100px;
+    
+  }
+  @media(max-width:1020px){
+    margin:100px;
+  }
+  @media(max-width:800px){
+    margin:100px;
+  }
+  @media(max-width:530px){
+    margin:auto;
+  }
+  @media (max-width:400px){
+    width:100%;
+   
+  }
 
   img {
     margin-bottom: 1.5rem;
@@ -44,6 +72,7 @@ export const FormWrapper = styled.div`
     border-radius: 4px;
     width: 85%;
   }
+  
   input[type="submit"] {
     background-color: ${(props) => props.theme.blue};
     color: ${(props) => props.theme.white};
@@ -68,17 +97,29 @@ export const FormWrapper = styled.div`
     color: ${(props) => props.theme.blue};
     cursor: pointer;
   }
+  
 `;
 export const TitleInfo = styled.div`
   float:left;
   .intro{
   margin-top:15rem;
   margin-left:150px;
+  text-align:justify;
+  width:500px !important;
   font-size:20px;
+  animation: ${IntroText} 1s ease-out;
   }
   h1{
     font-weight:bold;
     color: ${(props) => props.theme.blue};
+  }
+  @media (max-width:875px){
+    .intro{
+      margin:20px;
+      width:95% !important;
+      
+      padding:10px;
+    }
   }
 `;
 
@@ -115,11 +156,14 @@ const Login = ({ signup }) => {
   };
 
   return (
-    <div>
+    <div className="welcome" style={{width:"100%"}}>
       <TitleInfo>
-        <div className="intro">
+        <div className="intro" style={{width:"100%"}}>
         <h1>Complain Lodger</h1>
-        <p>The place where everyone comes with hope of resolving their complains</p>
+        <p>The place where everyone comes with hope of resolving their complains
+        This project is a way to resolve the complaints of our IITR-JANTA by Providing them an 
+          online plateform where they can lodge their complain and get them resolved while sitting in their hostel room
+        </p>
         </div>
       </TitleInfo>
     <FormWrapper onSubmit={handleLogin}>

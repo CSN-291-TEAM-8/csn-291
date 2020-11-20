@@ -7,7 +7,8 @@ export const lightTheme = {
     white: "#FFF",
     borderColor: "#DBDBDB",
     borderRadius: "4px",
-    inputBg:"#AAAAAA",
+    inputBg:"#FFF",
+    footerColor:"AED3D3"
   };
   export const darkTheme = {
     primaryColor: "#DADADA",
@@ -19,4 +20,5 @@ export const lightTheme = {
     inputBg:"#333333",
     borderColor: "#242424",
     borderRadius: "4px",
+    footerColor:"#312b2b"
   };

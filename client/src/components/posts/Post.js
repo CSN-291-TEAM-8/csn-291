@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import LikePost from "./LikePost";
@@ -12,6 +12,7 @@ import Modal from "./Modal";
 import { ModalContent } from "./PostComponents";
 import modify from "../../hooks/Modify";
 import { timeSince,connect } from "../../utils/fetchdata";
+import {ThemeContext} from "../../context/ThemeContext";
 import { MoreIcon, CommentIcon, InboxIcon } from "../../Icons";
 
 const Wrapper = styled.div`
@@ -85,7 +86,7 @@ const Wrapper = styled.div`
 const Post = () => {
   const history = useHistory();
   const { postId } = useParams();
-
+  const {theme} = useContext(ThemeContext);
   const comment = modify("");
   const commmentsEndRef = useRef(null);
 
@@ -172,7 +173,7 @@ const Post = () => {
               {post.user?.username}
             </h3>
           </div>
-          {post.isMine && <MoreIcon onClick={() => setShowModal(true)} />}
+          {post.isMine && <MoreIcon theme={theme} onClick={() => setShowModal(true)} />}
 
           {showModal && (
             <Modal>
@@ -200,8 +201,8 @@ const Post = () => {
               incLikes={incLikes}
               decLikes={decLikes}
             />
-            <CommentIcon />
-            <InboxIcon />
+            <CommentIcon theme={theme} />
+            <InboxIcon theme={theme} />
             <SavedComplaints isSaved={post?.isSaved} postId={post?._id} />
           </div>
 

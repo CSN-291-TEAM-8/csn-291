@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Comment = require("../models/Comment");
-const Notification = require("../models/Notification");
 const asyncHandler = require("../middleware/asynchandler");
 
 exports.getPosts = asyncHandler(async (req, res, next) => {
@@ -34,12 +33,12 @@ exports.getPost = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
-  if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
-      return next({
-          message:"You are not authorised to access this post",
-          statusCode:401,
-      })
-  }
+  // if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
+  //     return next({
+  //         message:"You are not authorised to access this post",
+  //         statusCode:401,
+  //     })
+  // }
 
   // is the post belongs to loggedin user?
   post.isMine = req.user.id === post.user._id.toString();
@@ -120,12 +119,12 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
-  if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
-    return next({
-        message:"You are not authorised to access this post",
-        statusCode:401,
-    })
-}
+//   if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
+//     return next({
+//         message:"You are not authorised to access this post",
+//         statusCode:401,
+//     })
+// }
   if (post.likes.includes(req.user.id)) {
     const index = post.likes.indexOf(req.user.id);
     post.likes.splice(index, 1);
@@ -136,13 +135,6 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
     post.likesCount = post.likesCount + 1;
     await post.save();
   }
-
-  let notification = await Notification.create({
-    user: post.user,
-    url:"/p/`req.params.id`",
-    sender: "`req.user.id`",
-    notifiedMessage: "`req.user.id` has liked your post",
-  });
 
   res.status(200).json({ success: true, data: {} });
 });
@@ -156,12 +148,12 @@ exports.addComment = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
-  if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
-    return next({
-        message:"You are not authorised to access this post",
-        statusCode:401,
-    })
-}
+//   if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
+//     return next({
+//         message:"You are not authorised to access this post",
+//         statusCode:401,
+//     })
+// }
   let comment = await Comment.create({
     user: req.user.id,
     post: req.params.id,
@@ -171,13 +163,6 @@ exports.addComment = asyncHandler(async (req, res, next) => {
   post.comments.push(comment._id);
   post.commentsCount = post.commentsCount + 1;
   await post.save();
-
-  let notification = await Notification.create({
-    user: post.user,
-    url:"/p/`req.params.id`",
-    sender: "`req.user.id`",
-    notifiedMessage: "`req.user.id` has commented on your post",
-  });
 
   comment = await comment
     .populate({ path: "user", select: "avatar username fullname" })
@@ -195,12 +180,12 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
-  if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
-    return next({
-        message:"You are not authorised to access this post",
-        statusCode:401,
-    })
-}
+//   if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
+//     return next({
+//         message:"You are not authorised to access this post",
+//         statusCode:401,
+//     })
+// }
   const comment = await Comment.findOne({
     _id: req.params.commentId,
     post: req.params.id,
@@ -263,12 +248,12 @@ exports.toggleSave = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
-  if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
-    return next({
-        message:"You are not authorised to access this post",
-        statusCode:401,
-    })
-}
+//   if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
+//     return next({
+//         message:"You are not authorised to access this post",
+//         statusCode:401,
+//     })
+// }
   const { user } = req;
 
   if (user.savedComplaints.includes(req.params.id)) {

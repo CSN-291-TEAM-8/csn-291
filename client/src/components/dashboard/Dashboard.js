@@ -83,7 +83,7 @@ const Dashboard = () => {
           style={{ fontWeight: tab === "SAVED" ? "500" : "" }}
           onClick={() => setTab("SAVED")}
         >
-          <SavedIcon />
+          <SavedIcon theme={theme} />
           <span>Saved</span>
         </div>
       </div>

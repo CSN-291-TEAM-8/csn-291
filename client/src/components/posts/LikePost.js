@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { connect } from "../../utils/fetchdata";
+import {ThemeContext} from "../../context/ThemeContext";
 import { HeartIcon, FilledHeartIcon } from "../../Icons";
 
 const LikePost = ({ isLiked, postId, incLikes, decLikes }) => {
   const [likedState, setLiked] = useState(isLiked);
+  const {theme} = useContext(ThemeContext);
 
   useEffect(() => {
     setLiked(isLiked);
@@ -26,7 +28,7 @@ const LikePost = ({ isLiked, postId, incLikes, decLikes }) => {
   }
 
   if (!likedState) {
-    return <HeartIcon onClick={handleToggleLike} />;
+    return <HeartIcon onClick={handleToggleLike} theme={theme}/>;
   }
 };
 

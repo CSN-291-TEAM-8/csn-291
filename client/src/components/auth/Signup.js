@@ -112,9 +112,12 @@ const Signup = ({ login }) => {
   return (
     <div>
       <TitleInfo>
-        <div className="intro">
+      <div className="intro" style={{width:"100%"}}>
         <h1>Complain Lodger</h1>
         <p>The place where everyone comes with hope of resolving their complains</p>
+        <p>This project is a way to resolve the complaints of our IITR-JANTA</p><p> by Providing them an 
+          online plateform where they can</p><p> lodge their complain and get them resolved while sitting in their hostel room
+        </p>
         </div>
       </TitleInfo>
     <FormWrapper onSubmit={handleLogin}>

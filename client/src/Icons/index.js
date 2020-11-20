@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext} from "react";
 
 export const HomeIcon = (props) => (
   <svg
@@ -16,7 +16,7 @@ export const InboxIcon = (props) => (
   <svg
     {...props}
     aria-label="chat"
-    fill="#262626"
+    fill={props.theme.primaryColor}
     height="22"
     viewBox="0 0 48 48"
     width="22"
@@ -29,7 +29,7 @@ export const HeartIcon = (props) => (
   <svg
     {...props}
     aria-label="Notification"
-    fill="#262626"
+    fill={props.theme.primaryColor}
     height="22"
     viewBox="0 0 48 48"
     width="22"
@@ -70,7 +70,7 @@ export const CommentIcon = (props) => (
   <svg
     {...props}
     aria-label="Comment"
-    fill="#262626"
+    fill={props.theme.primaryColor}
     height="22"
     viewBox="0 0 48 48"
     width="22"
@@ -87,7 +87,7 @@ export const BookmarkIcon = (props) => (
   <svg
     {...props}
     aria-label="Save"
-    fill="#262626"
+    fill={props.theme.primaryColor}
     height="22"
     viewBox="0 0 48 48"
     width="22"
@@ -113,7 +113,7 @@ export const FilledBookmarkIcon = (props) => (
   <svg
     {...props}
     aria-label="Remove"
-    fill="#262626"
+    fill={props.theme.primaryColor}
     height="24"
     viewBox="0 0 48 48"
     width="24"
@@ -126,7 +126,7 @@ export const MoreIcon = (props) => (
   <svg
     {...props}
     aria-label="More options"
-    fill="#262626"
+    fill={props.theme.primaryColor}
     height="16"
     viewBox="0 0 48 48"
     width="16"
@@ -158,7 +158,7 @@ export const MoreIcon = (props) => (
 export const PostIcon = (props) => (
   <svg
     aria-label="Posts"
-    fill="#262626"
+    fill={props.theme.primaryColor}
     height="12"
     viewBox="0 0 48 48"
     width="12"
@@ -187,7 +187,7 @@ export const OptionsIcon = (props) => (
   <svg
     {...props}
     aria-label="Options"
-    fill="#262626"
+    fill={props.theme.primaryColor}
     height="24"
     viewBox="0 0 48 48"
     width="24"
@@ -204,7 +204,7 @@ export const CloseIcon = (props) => (
   <svg
     {...props}
     aria-label="Close"
-    fill="#262626"
+    fill={props.theme.primaryColor}
     height="24"
     viewBox="0 0 48 48"
     width="24"

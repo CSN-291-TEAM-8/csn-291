@@ -10,12 +10,19 @@ const GlobalStyle = createGlobalStyle`
 		margin: 0;
 		box-sizing: inherit;
 	}
+	.footer{
+		color: ${(props) => props.theme.primaryColor};
+		background: ${(props) => props.theme.footerColor};
+		padding: 7px 3px;
+	}
 	textarea{
 		color: ${(props) => props.theme.primaryColor};
-		background: ${(props) => props.theme.bg};
+		background: ${(props) => props.theme.bg};		
+		border:1px solid ${(props) => props.theme.primaryColor} !important;		
+	}
+	.newpost-header textarea{
 		height:50px !important;
 		position:absolute;
-		border:1px solid ${(props) => props.theme.primaryColor} !important;
 		bottom:0px;
 	}
 	.modal-content:first-child{

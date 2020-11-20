@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import Modal from "../posts/Modal";
 import modify from "../../hooks/Modify";
 import { FeedContext } from "../../context/FeedContext";
+import {ThemeContext} from "../../context/ThemeContext";
 import { connect, uploadImage } from "../../utils/fetchdata";
 import { NewPostIcon } from "../../Icons";
 
@@ -45,6 +46,7 @@ const CreateNew = () => {
   const { feed, setFeed } = useContext(FeedContext);
   const [showModal, setShowModal] = useState(false);
   const caption = modify("");
+  const {theme} = useContext(ThemeContext);
   const [preview, setPreview] = useState("");
   const [postImage, setPostImage] = useState("");
 
@@ -63,7 +65,7 @@ const CreateNew = () => {
       });
     }
     else {
-      toast.error("Kindly upload a valid image file");
+      return toast.error("Kindly upload a valid image file");
     }
   };
 
@@ -106,7 +108,7 @@ const CreateNew = () => {
   return (
     <NewPostWrapper>
       <label htmlFor="upload-post">
-        <NewPostIcon />
+        <NewPostIcon theme={theme}/>
       </label>
       <input
         id="upload-post"
