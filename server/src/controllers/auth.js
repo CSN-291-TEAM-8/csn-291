@@ -11,9 +11,9 @@ var transporter = nodemailer.createTransport({
   }
 });
 function generateOTP(n){
-  let s = "";
+  let s = 0;
   for(var i=0;i<n;i++){
-    s+=Math.floor(Math.random()*10);
+    s = s*10 + Math.floor(Math.random()*10);
   }
   return parseInt(s);
 }
@@ -59,7 +59,7 @@ exports.login = async (req, res, next) => {
 };
 exports.OTPVerify = async(req,res,next) =>{
   const {email} = req.body;
-  console.log(email);
+  
   if(email.indexOf("iitr.ac.in")==-1){
     return next({
       message:"Kindly use your institute email id",
@@ -78,14 +78,14 @@ exports.OTPVerify = async(req,res,next) =>{
     ifOTP.remove();
   }
   const OTP = generateOTP(6);
-  const expires=Date.now()+720;
+  const expires=Date.now()+7200000;
   await OTPmodel.create({email,OTP,expires});
   const msg ={
     to:email,
     from:"complaintlodgeriitr@gmail.com",
     subject:"OTP for signup",
     text:"Hello "+email+",\nhere is the OTP for signup\n"+OTP+"\n\nThis OTP will expire in 2 hours\nThis is system generated mail.So kindly do not reply.\n\nRegards\n CLTIITR",
-    html:`<h3>Hello</h3> ${email},<br>here is the OTP for signup <b>${OTP}</b><div>This OTP will expire in 2 hours<br>This is system generated mail.So kindly do not reply.<br><br>Regards<br> CLTIITR `
+    
   };
   transporter.sendMail(msg).then(()=>{
     res.status(200).json({success:true,message:"Kindly check your email for OTP"});
@@ -118,9 +118,11 @@ exports.signup = async (req, res, next) => {
       statusCode:400,
     })    
   }
-  
-  if(OTPVerify.getExpiry()<0){
-     return next({
+  const expired = await OTPmodel.findOne({email:email,expires:{$lt:Date.now()}});
+  console.log(expired);
+  if(expired){
+    OTPVerify.remove();
+     return next({       
        message:"Your OTP is expired now",
        statusCode:400,
      }) 

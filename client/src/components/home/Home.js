@@ -34,7 +34,7 @@ const Home = () => {
         setFeed(res.data);
         setLoading(false);
       })
-			.catch(res => {console.log(res); toast.error("Unable to load feed")});
+			.catch(res => {console.log(res); toast.error("Unable to load feed");logout()});
   }, [setFeed, setUser]);
 
   if (loading) {

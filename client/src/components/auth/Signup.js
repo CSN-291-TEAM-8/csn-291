@@ -12,17 +12,22 @@ import logo from "../../assets/navlogo.png";
 
 const Signup = ({ login }) => {
   const { setUser } = useContext(UserContext);
+  
   const email = modify("");
   const [Sign,ShowSignUpButton] = useState(false);
   const [OTPS,showOTPInput] = useState(false);
-  const [OTPB,showOTPButton] = useState(true);
+  const [dis,setDis] = useState(false);
+  const [val,setval] = useState("Request OTP");
+  
   const fullname = modify("");
   const username = modify("");
   const password = modify("");
   const OTP = modify("");
 
-  const OTPclick = async(e)=>{    
+  const OTPclick = async(e)=>{  
+      setDis(true);
     if(!email.value||!email.value.includes("iitr.ac.in")){
+      setDis(false);
       return toast.error("Please use your institute email id");
     }
     try{
@@ -32,10 +37,13 @@ const Signup = ({ login }) => {
       await connect("/auth/OTPrequest", { body });
     }
     catch(err){
+      setDis(false);
       return toast.error(err.message);
     }
-    showOTPButton(false);
-    showOTPInput(true);    
+    
+    showOTPInput(true);
+    setDis(false);
+    setval("Resend OTP");    
     return toast.success("Enter the 6 digit OTP sent to your email");
   }
   const OTPinput = (e)=>{
@@ -140,26 +148,18 @@ const Signup = ({ login }) => {
           onChange={fullname.onChange}
         />
         <input
-          type="text"
+          type="text"          
           placeholder="Username"
           value={username.value}
           onChange={username.onChange}
         />
         <input
-          type="password"
+          type="password"          
           placeholder="Password"
           value={password.value}
           onChange={password.onChange}
         />
-        {OTPB&&
-        <input
-          type="button"
-          style={{background:"#00FF10",fontWeight:"bold",color:"#000000",cursor:"pointer"}}
-          value="Request OTP"
-          onClick={OTPclick}         
-        />
         
-      }
       {OTPS&&
         <input 
           type="number" 
@@ -169,6 +169,15 @@ const Signup = ({ login }) => {
           max="999999"
           onChange={OTP.onChange}
           onInput={OTPinput}/>          
+      }
+      {!dis&&!Sign&&
+        <input
+          type="button"
+          style={{background:"#00FF10",fontWeight:"bold",color:"#000000",cursor:"pointer"}}
+          value={val}
+          disabled={dis}
+          onClick={OTPclick}         
+        />
       }
       {Sign&&       
         <input type="submit" value="Sign up" className="signup-btn" />
