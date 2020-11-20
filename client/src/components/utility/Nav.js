@@ -48,6 +48,21 @@ const NavWrapper = styled.div`
     input {
       display: none;
     }
+    ul{
+      position:fixed;
+      top:calc(100% - 42px);
+      background-color: ${(props) => props.theme.white};
+      border-top: 1px solid ${(props) => props.theme.borderColor};
+      justify-content:space-between;
+      width:100%;
+      padding:2px 5px;
+      left:0;
+      height:40px;
+    }
+    .nav-logo{
+      width:200px;
+      margin:auto;
+    }
   }
 `;
 
@@ -62,7 +77,7 @@ const Nav = () => {
           <img className="nav-logo" src={navlogo} alt="logo" />
         </Link>
         <Search />
-        <ul style={{display:"flex",alignItems:"center"}}>
+        <ul clasName="navlink" style={{display:"flex",alignItems:"center"}}>
           <li>
             <Link to="/">
               <HomeIcon theme={theme}/>
