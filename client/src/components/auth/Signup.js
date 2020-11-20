@@ -26,7 +26,10 @@ const Signup = ({ login }) => {
       return toast.error("Please use your institute email id");
     }
     try{
-      await connect("/auth/OTPrequest", { email:email.value });
+      const body = {
+        email:email.value
+      }
+      await connect("/auth/OTPrequest", { body });
     }
     catch(err){
       return toast.error(err.message);

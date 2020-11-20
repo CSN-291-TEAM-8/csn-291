@@ -1,5 +1,22 @@
 const db = require("../models/User");
-
+const OTPmodel = require("../models/OTPmodel");
+const nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+     user: 'complaintlodgeriitr@gmail.com',
+     pass: 'Kk1357924!!'
+  }
+});
+function generateOTP(n){
+  let s = "";
+  for(var i=0;i<n;i++){
+    s+=Math.floor(Math.random()*10);
+  }
+  return parseInt(s);
+}
 exports.login = async (req, res, next) => {
     const { email, password,isStudent } = req.body;
 
@@ -40,17 +57,76 @@ exports.login = async (req, res, next) => {
   // then send json web token as response
   res.status(200).json({ success: true,token: token });
 };
+exports.OTPVerify = async(req,res,next) =>{
+  const {email} = req.body;
+  console.log(email);
+  if(email.indexOf("iitr.ac.in")==-1){
+    return next({
+      message:"Kindly use your institute email id",
+      statusCode:400,
+    })
+  }
+  const user = await db.findOne({email});
+  if(user){
+    return next({
+      message:"This email is already registered",
+      statusCode:400
+    })
+  }
+  const ifOTP = await OTPmodel.findOne({email});
+  if(ifOTP){
+    ifOTP.remove();
+  }
+  const OTP = generateOTP(6);
+  const expires=Date.now()+720;
+  await OTPmodel.create({email,OTP,expires});
+  const msg ={
+    to:email,
+    from:"complaintlodgeriitr@gmail.com",
+    subject:"OTP for signup",
+    text:"Hello "+email+",\nhere is the OTP for signup\n"+OTP+"\n\nThis OTP will expire in 2 hours\nThis is system generated mail.So kindly do not reply.\n\nRegards\n CLTIITR",
+    html:`<h3>Hello</h3> ${email},<br>here is the OTP for signup <b>${OTP}</b><div>This OTP will expire in 2 hours<br>This is system generated mail.So kindly do not reply.<br><br>Regards<br> CLTIITR `
+  };
+  transporter.sendMail(msg).then(()=>{
+    res.status(200).json({success:true,message:"Kindly check your email for OTP"});
+  }).catch((error)=>{
+    res.status(200).json({success:false,message:error.message});
+  })
+  
 
+}
 exports.signup = async (req, res, next) => {
-  const { fullname, username, email, password,isStudent,hostel,institute_id } = req.body;
+  const { fullname, username, email, password,isStudent,hostel,institute_id,OTP } = req.body;
   const usercheck = await db.findOne({ email });
+  const seccheck = await db.findOne({username});
   if(usercheck){
     return next({
       message: "This email is already registered to an accout",
       statusCode: 400,
     });
   }
-  const user = await db.create({ fullname, username, email, password ,hostel,institute_id});
+  if(seccheck){
+    return next({
+      message: "This username is already registered to an accout",
+      statusCode: 400,
+    });
+  }
+  const OTPVerify = await OTPmodel.findOne({email:email,OTP:OTP});
+  if(!OTPVerify){
+    return next({
+      message:"OTP did not match",
+      statusCode:400,
+    })    
+  }
+  
+  if(OTPVerify.getExpiry()<0){
+     return next({
+       message:"Your OTP is expired now",
+       statusCode:400,
+     }) 
+  }
+  OTPVerify.remove();
+  const user = await db.create({ fullname, username, email, password ,hostel,institute_id,isStudent});
 
   const token = user.getJwtToken();
 

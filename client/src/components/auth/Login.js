@@ -29,8 +29,7 @@ export const FormWrapper = styled.div`
   width: 350px;
   
   border: 1px solid ${(props) => props.theme.borderColor};
-  margin: 10rem auto;
-  margin-bottom:10px;
+  margin: 10rem auto;  
   margin-right: 5%;
   text-align: center;
   padding: 2rem 0;
@@ -50,6 +49,7 @@ export const FormWrapper = styled.div`
   }
   @media(max-width:530px){
     margin:auto;
+    margin-bottom:15px;
   }
   @media (max-width:400px){
     width:100%;

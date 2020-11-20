@@ -77,7 +77,7 @@ const Nav = () => {
           <img className="nav-logo" src={navlogo} alt="logo" />
         </Link>
         <Search />
-        <ul clasName="navlink" style={{display:"flex",alignItems:"center"}}>
+        <ul className="navlink" style={{display:"flex",alignItems:"center"}}>
           <li>
             <Link to="/">
               <HomeIcon theme={theme}/>
