@@ -41,12 +41,12 @@ const Wrapper = styled.div`
 		justify-content: center;
 		align-items: center;
 		height: 100%;
-		color: ${(props) => props.theme.white};
+		color: ${(props) => props.theme.primaryColor};
 		font-weight: 500;
 		font-size: 1.1rem;
 	}
 	svg {
-		fill: ${(props) => props.theme.white};
+		fill: ${(props) => props.theme.primaryColor};
 		position: relative;
 		top: 4px;
 	}
@@ -83,6 +83,7 @@ const Wrapper = styled.div`
 	}
 	@media screen and (max-width: 400px) {
 		img, .overlay {
+			background: rgba(0, 0, 0, 0) linear-gradient(-90deg, rgb(18, 18, 18) 0%, rgb(22, 22, 22) 50%, rgb(18, 18, 18) 100%) repeat scroll 0% 0% / 400% 400%;
 			height: 170px;
 			width: 100%;
 	}
@@ -101,7 +102,7 @@ const PostProfilePreview = ({ posts }) => {
           className="container-overlay"
           onClick={() => history.push(`/p/${post._id}`)}
         >
-          <img src={post.files[0]} alt="post" />
+          <img src={post.files[0]||"https://kkleap.github.io/assets/loaderi.gif"} alt="post" />
           <div className="overlay">
             <div className="overlay-content">
               <span>

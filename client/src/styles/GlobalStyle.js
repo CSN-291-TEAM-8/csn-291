@@ -18,7 +18,7 @@ const GlobalStyle = createGlobalStyle`
 	textarea{
 		color: ${(props) => props.theme.primaryColor};
 		background: ${(props) => props.theme.bg};		
-		border:1px solid ${(props) => props.theme.primaryColor} !important;		
+			
 	}
 	.newpost-header textarea{
 		height:50px !important;

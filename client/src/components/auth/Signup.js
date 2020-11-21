@@ -125,9 +125,8 @@ const Signup = ({ login }) => {
       <TitleInfo>
       <div className="intro" style={{width:"100%"}}>
         <h1>Complain Lodger</h1>
-        <p>The place where everyone comes with hope of resolving their complains</p>
-        <p>This project is a way to resolve the complaints of our IITR-JANTA</p><p> by Providing them an 
-          online plateform where they can</p><p> lodge their complain and get them resolved while sitting in their hostel room
+        <p>The place where everyone comes with hope of resolving their complaints.This project is an attempt to resolve the complaints of our IITR-JANTA by providing them an 
+          online plateform where they can lodge their complaints and get them resolved easily while sitting in their hostel room
         </p>
         </div>
       </TitleInfo>

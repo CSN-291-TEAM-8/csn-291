@@ -58,7 +58,9 @@ const NavWrapper = styled.div`
       padding:2px 5px;
       left:0;
       height:40px;
-    }
+    }    
+      
+    
     .nav-logo{
       width:200px;
       margin:auto;
@@ -79,21 +81,21 @@ const Nav = () => {
         <Search />
         <ul className="navlink" style={{display:"flex",alignItems:"center"}}>
           <li>
-            <Link to="/">
-              <HomeIcon theme={theme}/>
+            <Link to="/" >
+              <HomeIcon activeClassName="active" theme={theme}/>
             </Link>
           </li>
           <li>
-            <NewPost theme={theme}/>
+            <NewPost activeClassName="active" theme={theme}/>
           </li>
           <li>
             <Link to="/highlight">
-              <HighlightIcon theme={theme}/>
+              <HighlightIcon activeClassName="active" theme={theme}/>
             </Link>
           </li>          
           <li>
           <Link to="/accounts/notifications">
-            <BellIcon theme={theme}/>
+            <BellIcon activeClassName="active" theme={theme}/>
             </Link>
           </li>
           <li>

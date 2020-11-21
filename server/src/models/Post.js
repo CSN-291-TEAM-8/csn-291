@@ -25,6 +25,7 @@ const PostSchema = new mongoose.Schema({
   },
   files: {
     type: [String],
+    default:["https://kkleap.github.io/assets/loader.gif"],
     validate: (v) => v === null || v.length > 0,
   },
   likes: [{ type: mongoose.Schema.ObjectId, ref: "User" }],

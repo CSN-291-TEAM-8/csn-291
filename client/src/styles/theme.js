@@ -11,7 +11,7 @@ export const lightTheme = {
     footerColor:"AED3D3"
   };
   export const darkTheme = {
-    primaryColor: "#DADADA",
+    primaryColor: "#EEE",
     secondaryColor: "#3D3D3D",
     bg: "#030303",
     blue: "#0095F6",

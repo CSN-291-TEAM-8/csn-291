@@ -77,10 +77,10 @@ const ProfileForm = () => {
   const { user, setUser } = useContext(UserContext);
   const [newAvatar, setNewAvatar] = useState("");
 
-  const fullname = modify(user.fullname);
-  const username = modify(user.username);
-  const bio = modify(user.bio);
-  const website = modify(user.website);
+  const fullname = modify(user.fullname||"");
+  const username = modify(user.username||"");
+  const bio = modify(user.bio||"");
+  const website = modify(user.website||"");
 
   const handleImageUpload = (e) => {
     if (e.target.files[0]) {

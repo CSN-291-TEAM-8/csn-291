@@ -68,7 +68,7 @@ const Dashboard = () => {
 
   return (
     <Wrapper>
-      <ProfileHeader dashboard={dashboard} />
+      <ProfileHeader profile={dashboard} />
       <hr />
 
       <div className="dashboard-tab">
@@ -76,14 +76,14 @@ const Dashboard = () => {
           style={{ fontWeight: tab === "POSTS" ? "500" : "" }}
           onClick={() => setTab("POSTS")}
         >
-          <PostIcon theme={theme} />
+          <PostIcon />
           <span>Posts</span>
         </div>
         <div
           style={{ fontWeight: tab === "SAVED" ? "500" : "" }}
           onClick={() => setTab("SAVED")}
         >
-          <SavedIcon theme={theme} />
+          <SavedIcon/>
           <span>Saved</span>
         </div>
       </div>
@@ -104,14 +104,14 @@ const Dashboard = () => {
 
       {tab === "SAVED" && (
         <>
-          {dashboard?.savedPosts?.length === 0 ? (
+          {dashboard?.savedComplaints?.length === 0 ? (
             <Placeholder
               title="Saved"
               text="Save complaints that you want to see again"
               icon="bookmark"
             />
           ) : (
-            <PostProfilePreview posts={dashboard?.savedPosts} />
+            <PostProfilePreview posts={dashboard?.savedComplaints} />
           )}
         </>
       )}

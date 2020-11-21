@@ -42,7 +42,21 @@ const userSchema = new schema({
   },
   bio: String,
   website: String,
-  friends: [{ type: mongoose.Schema.ObjectId, ref: "User" }],  
+  followers: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+  followerCount: {
+    type: Number,
+    default: 0,
+  },
+  following:[{type: mongoose.Schema.ObjectId, ref: "User" }],
+  followingCount: {
+    type: Number,
+    default: 0,
+  },
+  posts: [{ type: mongoose.Schema.ObjectId, ref: "Post" }],
+  postCount: {
+    type: Number,
+    default: 0,
+  },  
   savedComplaints: [{ type: mongoose.Schema.ObjectId, ref: "Post" }],
   createdAt: {
     type: Date,

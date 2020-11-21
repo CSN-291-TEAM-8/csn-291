@@ -6,11 +6,11 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
   let users = await User.find().select("-password").lean().exec();//select every user
 
   users.forEach((user) => {
-    user.isFriend = false;
+    user.isFollowing = false;
     //set who are friend a user or not...later on only a chat between friends and friend will happen
-    const friends = user.friends.map((friend) => friend._id.toString());
-    if (friends.includes(req.user.id)) {
-      user.isFriend = true;
+    const followers = user.followers.map((follower) => follower._id.toString());
+    if (followers.includes(req.user.id)) {
+      user.isFollowing = true;
     }
   });
 
@@ -24,8 +24,8 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     .select("-password")
     .populate({ path: "posts", select: "files commentsCount likesCount" })
     .populate({ path: "savedComplaints", select: "files commentsCount likesCount" })
-    .populate({ path: "friends", select: "avatar username fullname" })
-    .populate({ path: "friend", select: "avatar username fullname" })
+    .populate({ path: "followers", select: "avatar username fullname" })
+    .populate({ path: "following", select: "avatar username fullname" })     
     .lean()
     .exec();
 
@@ -36,33 +36,33 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     });
   }
 
-  user.isFriend = false;
-  const friends = user.friends.map((friend) => friend._id.toString());
+  user.isFollowing = false;
+  const followers = user.followers.map((friend) => friend._id.toString());
 
-  user.friends.forEach((friend) => {
-    friend.isFriend = false;
-    if (req.user.friends.includes(friend._id.toString())) {
-      friend.isFriend = true;
+  user.followers.forEach((friend) => {
+    friend.isFollower = false;
+    if (req.user.followers.includes(friend._id.toString())) {
+      friend.isFollower = true;
     }
   });
 
-  user.friends.forEach((user) => {
-    user.isFriend = false;
-    if (req.user.friends.includes(user._id.toString())) {
-      user.isFriend = true;
+  user.following.forEach((user) => {
+    user.isFollowing = false;
+    if (req.user.following.includes(user._id.toString())) {
+      user.isFollowing = true;
     }
   });
 
-  if (friends.includes(req.user.id)) {
-    user.isFriend = true;
+  if (followers.includes(req.user.id)) {
+    user.isFollowing = true;
   }
 
   user.isMe = req.user.id === user._id.toString();
-
+  console.log(user);
   res.status(200).json({ success: true, data: user });
 });
 
-exports.friend = asyncHandler(async (req, res, next) => {
+exports.follow = asyncHandler(async (req, res, next) => {
   // make sure the user exists
   const user = await User.findById(req.params.id);
 
@@ -78,24 +78,24 @@ exports.friend = asyncHandler(async (req, res, next) => {
     return next({ message: "Woyla!Are you a combination of 2 soul??", status: 400 });
   }
 
-  // only become friend if the user is not friend already
-  if (user.friends.includes(req.user.id)) {
-    return next({ message: "You both are already friend", status: 400 });
+  // only become follower if the user is not following already
+  if (user.followers.includes(req.user.id)) {
+    return next({ message: "You are already following", status: 400 });
   }
 
   await User.findByIdAndUpdate(req.params.id, {
-    $push: { friends: req.user.id },
-    $inc: { friendCount: 1 },
+    $push: { followers: req.user.id },
+    $inc: { followerCount: 1 },
   });
   await User.findByIdAndUpdate(req.user.id, {
-    $push: { friends: req.params.id },
-    $inc: { friendCount: 1 },
+    $push: { following: req.params.id },
+    $inc: { followingCount: 1 },
   });
 
   res.status(200).json({ success: true, data: {} });
 });
 
-exports.unfriend = asyncHandler(async (req, res, next) => {
+exports.unfollow = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.id);
 
   if (!user) {
@@ -111,23 +111,23 @@ exports.unfriend = asyncHandler(async (req, res, next) => {
   }
  //remove both to their friend list
   await User.findByIdAndUpdate(req.params.id, {
-    $pull: { friends: req.user.id },
-    $inc: { friendCount: -1 },
+    $pull: { followers: req.user.id },
+    $inc: { followerCount: -1 },
   });
   await User.findByIdAndUpdate(req.user.id, {
-    $pull: { friends: req.params.id },
-    $inc: { friendCount: -1 },
+    $pull: { following: req.params.id },
+    $inc: { followingCount: -1 },
   });
 
   res.status(200).json({ success: true, data: {} });
 });
 
 exports.publicfeed = asyncHandler(async (req, res, next) => {
-  const friends = req.user.friends;
+  const followers = req.user.followers;
 
   const users = await User.find()
     .where("_id")
-    .in(friends.concat([req.user.id]))
+    .in(followers.concat([req.user.id]))
     .exec();
 
   const postIds = users.map((user) => user.posts).flat();

@@ -86,8 +86,7 @@ export const CommentIcon = (props) => (
 export const BookmarkIcon = (props) => (
   <svg
     {...props}
-    aria-label="Save"
-    fill={props.theme.primaryColor}
+    aria-label="Save"    
     height="22"
     viewBox="0 0 48 48"
     width="22"
@@ -158,7 +157,7 @@ export const MoreIcon = (props) => (
 export const PostIcon = (props) => (
   <svg
     aria-label="Posts"
-    fill={props.theme.primaryColor}
+    fill="#8e8e8e"
     height="12"
     viewBox="0 0 48 48"
     width="12"
@@ -187,7 +186,7 @@ export const OptionsIcon = (props) => (
   <svg
     {...props}
     aria-label="Options"
-    fill={props.theme.primaryColor}
+    fill="#8e8e8e"
     height="24"
     viewBox="0 0 48 48"
     width="24"

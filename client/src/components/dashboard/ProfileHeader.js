@@ -21,6 +21,9 @@ const MobileWrapper = styled.div`
   .mobile-profile-stats {
     display: none;
   }
+  button{
+    color:${(props)=>props.theme.primaryColor} !important;
+  }
   @media screen and (max-width: 645px) {
     .mobile-bio {
       display: block;
@@ -70,6 +73,9 @@ const Wrapper = styled.div`
   }
   a {
     color: ${(props) => props.theme.blue};
+  }
+  button{
+    color: ${(props)=>props.theme.primaryColor};
   }
   @media screen and (max-width: 645px) {
     font-size: 1rem;
@@ -202,7 +208,7 @@ const ProfileHeader = ({ profile }) => {
     toast.success("You are logged out");
   };
 
-  useEffect(() => setFollowers(profile?.followersCount), [profile]);
+  useEffect(() => setFollowers(profile?.followerCount), [profile]);
 
   return (
     <>
@@ -214,12 +220,13 @@ const ProfileHeader = ({ profile }) => {
             {profile?.isMe ? (
               <div className="options">
                 <Button
-                  secondary
+                  secondary                  
                   onClick={() => history.push("/accounts/edit")}
+                  
                 >
                   Edit Profile
                 </Button>
-                <OptionsIcon onClick={handleLogout} theme={theme}/>
+                <OptionsIcon fill={theme.primaryColor} onClick={handleLogout}/>
               </div>
             ) : (
               <Follow

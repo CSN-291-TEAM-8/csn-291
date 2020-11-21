@@ -4,8 +4,8 @@ const router = express.Router();
 const {
   getUsers,
   getUser,
-  friend,
-  unfriend,  
+  follow,
+  unfollow,  
   publicfeed,
   searchUser,
   editDetails,
@@ -17,7 +17,7 @@ router.route("/").put(Verify, editDetails);
 router.route("/feed").get(Verify, publicfeed);
 router.route("/search").get(searchUser);
 router.route("/:username").get(Verify, getUser);
-router.route("/:id/friend").get(Verify, friend);
-router.route("/:id/unfriend").get(Verify, unfriend);
+router.route("/:id/friend").get(Verify, follow);
+router.route("/:id/unfriend").get(Verify, unfollow);
 
 module.exports = router;

@@ -64,7 +64,7 @@ const Wrapper = styled.div`
     margin-right: 1rem;
   }
   textarea {
-    height: 100%;
+    height: 43px;
     width: 100%;
     background: ${(props) => props.theme.bg};
     border: none;
@@ -152,7 +152,7 @@ const Post = () => {
     <Wrapper>
       <img
         className="post-img"
-        src={post.files?.length && post.files[0]}
+        src={post.files[0]||"https://kkleap.github.io/assets/loaderi.gif"}
         alt="post"
       />
 

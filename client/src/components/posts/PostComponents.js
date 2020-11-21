@@ -66,7 +66,7 @@ export const PostWrapper = styled.div`
   }
   .post-img {
     width: 100%;
-    height: 100%;
+    height: 500px;
   }
   .post-actions {
     display: flex;
@@ -92,7 +92,7 @@ export const PostWrapper = styled.div`
     cursor: pointer;
   }
   textarea {
-    height: 100%;
+    height: 43px;
     width: 100%;
     border: none;
     border-top: 1px solid ${(props) => props.theme.borderColor};
@@ -159,7 +159,7 @@ const PostComponents = ({ post }) => {
 
       <img
         className="post-img"
-        src={post.files?.length && post.files[0]}
+        src={post.files[0]||"https://kkleap.github.io/assets/loaderi.gif"}
         alt="post-img"
       />
 
