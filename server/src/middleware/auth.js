@@ -1,10 +1,16 @@
 const jwt = require("jsonwebtoken");
 const Userdb = require("../models/User");
-
+const Notification = require("../models/Notification");
 
 exports.Verify = async (req, res, next) => {
-    let token;
-
+    let token,notices=[];
+    if(req.user&&req.user.id){
+        notices = Notification.find({}).sort({createdAt:-1});
+        notices = notices.filter(function(notice){
+            return notice.receiver.includes(req.user.id);
+        })
+    }
+    req.notices = notices;
     if (
         req.headers.authorization &&
         req.headers.authorization.startsWith("Bearer")

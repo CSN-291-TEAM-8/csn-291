@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Post = require("../models/Post");
+const Notification = require('../models/Notification');
 const asyncHandler = require("../middleware/asynchandler");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
@@ -16,7 +17,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
   users = users.filter((user) => user._id.toString() !== req.user.id);//do not include the same user
 
-  res.status(200).json({ success: true, data: users });
+  res.status(200).json({ success: true, data: users,notices:req.notices });
 });
 
 exports.getUser = asyncHandler(async (req, res, next) => {
@@ -72,7 +73,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
   user.isMe = req.user.id === user._id.toString();
   console.log("\n\n\nreq.user",user);
-  res.status(200).json({ success: true, data: user });
+  res.status(200).json({ success: true, data: user,notices:req.notices });
 });
 
 exports.follow = asyncHandler(async (req, res, next) => {
@@ -100,12 +101,18 @@ exports.follow = asyncHandler(async (req, res, next) => {
     $push: { followers: req.user.id },
     $inc: { followerCount: 1 },
   });
+  await Notification.create({
+    sender:req.user.id,
+    receiver:req.params.id,
+    url:`/${req.user.username}`,
+    notifiedMessage:`${req.user.username} started following you`
+  })
   await User.findByIdAndUpdate(req.user.id, {
     $push: { following: req.params.id },
     $inc: { followingCount: 1 },
   });
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({ success: true, data: {},notices:req.notices });
 });
 
 exports.unfollow = asyncHandler(async (req, res, next) => {
@@ -117,6 +124,12 @@ exports.unfollow = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
+  await Notification.find({
+    sender:req.user.id,
+    receiver:[req.params.id],
+    url:`/${req.user.username}`,
+    notifiedMessage:`${req.user.username} started following you`
+  }).remove()
 
   // make the sure the user is not the logged in user
   if (req.params.id === req.user.id) {
@@ -132,11 +145,12 @@ exports.unfollow = asyncHandler(async (req, res, next) => {
     $inc: { followingCount: -1 },
   });
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({ success: true, data: {},notices:req.notices });
 });
 
 exports.publicfeed = asyncHandler(async (req, res, next) => {
   const followers = req.user.followers;
+  
 
   const users = await User.find()
     .where("_id")
@@ -186,7 +200,7 @@ exports.publicfeed = asyncHandler(async (req, res, next) => {
     });
   });
 
-  res.status(200).json({ success: true, data: posts });
+  res.status(200).json({ success: true, data: posts ,notices:req.notices});
 });
 
 exports.searchUser = asyncHandler(async (req, res, next) => {
@@ -199,7 +213,7 @@ exports.searchUser = asyncHandler(async (req, res, next) => {
   
   //let users = await User.find({ username: regex});
  User.find({fullname:regex}).then((data)=>{
-  res.status(200).json({ success: true, data });
+  res.status(200).json({ success: true,notices:req.notices, data });
  });
   //let searchresult = users.concat(users2); 
  
@@ -225,5 +239,5 @@ exports.editDetails = asyncHandler(async (req, res, next) => {
     }
   ).select("avatar username fullname email bio website");
 
-  res.status(200).json({ success: true, data: user });
+  res.status(200).json({ success: true, data: user,notices:req.notices });
 });

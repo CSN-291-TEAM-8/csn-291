@@ -1,6 +1,7 @@
 const Post = require("../models/Post");
 const User = require("../models/User");
 const Report = require("../models/Report");
+const Notification = require("../models/Notification");
 const Comment = require("../models/Comment");
 const asyncHandler = require("../middleware/asynchandler");
 
@@ -15,9 +16,12 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
     })
   })
   post.likers = likes;
+  
 })
+const notices = Notification.find({receiver:[...req.user.id]});
 setTimeout(function(){
-  res.status(200).json({ success: true, data: posts });
+  console.log("\n\n\n\nNotices\n\n",notices);
+  res.status(200).json({ success: true, data: posts,notices:notices });
 },1000)
 });
 
@@ -88,16 +92,17 @@ exports.getPost = asyncHandler(async (req, res, next) => {
   
   setTimeout(function(){
     console.log(post);    
-    res.status(200).json({ success: true, data: post });
+    res.status(200).json({ success: true, data: post,notices:req.notices });
 },1000)
 });
 exports.Highlight = asyncHandler(async(req,res,next)=>{
   const post = await Post.find({isPrivate:false,resolved:false}).sort({commentsCount:-1,likesCount:-1});
   console.log(post);
-  res.status(200).json({success:true,data:post});
+  res.status(200).json({success:true,data:post,notices:req.notices});
 }) 
 exports.reportComplain = asyncHandler(async(req,res,next)=>{
   const post = await Post.findById(req.params.id);
+  
   if (!post) {
     return next({
       message: `No post found for id ${req.params.id}`,
@@ -110,20 +115,24 @@ exports.reportComplain = asyncHandler(async(req,res,next)=>{
       statusCode:401
     })
   }
-  if(post.user.toString()===req.user.id){
+  if(post.user._id.toString()===req.user.id){
     return next({
       message:"HAHAHAHA!!DAMN Funny!Reporting your own post",
       statusCode:401
     })    
   }
+  
   await Report.create({description:req.body.reportText,postId:req.params.id,reporter:req.user.id});
-  res.status(200).json({success:true,data:{}});
+  res.status(200).json({success:true,data:{},notices:req.notices});
 
   
 })
 exports.deletePost = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
-
+  await Notification.deleteMany({postId:req.params.id},function(err,res){
+    if(err)
+      console.log(err);
+  });
   if (!post) {
     return next({
       message: `No post found for id ${req.params.id}`,
@@ -131,13 +140,13 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
     });
   }
 
-  if (post.user.toString() !== req.user.id) {
+  if (post.user._id.toString() !== req.user.id) {
     return next({
       message: "You are not authorized to delete this post",
       statusCode: 401,
     });
   }
-
+ 
   await User.findByIdAndUpdate(req.user.id, {
     $pull: { posts: req.params.id },
     $inc: { postCount: -1 },
@@ -145,7 +154,7 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
 
   await post.remove();
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({ success: true, data: {},notices:req.notices });
 });
 
 exports.addPost = asyncHandler(async (req, res, next) => {
@@ -153,6 +162,12 @@ exports.addPost = asyncHandler(async (req, res, next) => {
   const user = req.user.id;
   
   let post = await Post.create({ caption, files, tags, user,isPrivate,accesibility});
+  if(isPrivate){
+    await Notification.create({receiver:accesibility,sender:user,postId:post._id,type:"newPost",url:`/p/${post._id}`,notifiedMessage:`${req.user.username} added a private complaint post.Click to view it`});
+  }
+  else{
+    await Notification.create({receiver:req.user.followers,sender:user,postId:post._id,type:"newPost",url:`/p/${post._id}`,notifiedMessage:`${req.user.username} added a general complaint post.Click to view it`});
+  }
 
   await User.findByIdAndUpdate(req.user.id, {
     $push: { posts: post._id },
@@ -163,7 +178,7 @@ exports.addPost = asyncHandler(async (req, res, next) => {
     .populate({ path: "user", select: "avatar username fullname" })
     .execPopulate();
 
-  res.status(200).json({ success: true, data: post });
+  res.status(200).json({ success: true, data: post,notices:req.notices });
 });
 
 exports.toggleLike = asyncHandler(async (req, res, next) => {
@@ -176,6 +191,7 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
+  
 //   if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
 //     return next({
 //         message:"You are not authorised to access this post",
@@ -186,14 +202,18 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
     const index = post.likes.indexOf(req.user.id);
     post.likes.splice(index, 1);
     post.likesCount = post.likesCount - 1;
+    if(req.user.id!==post.user._id.toString())
+    await Notification.find({receiver:[post.user._id],sender:req.user.id,postId:post._id,type:"likedPost",notifiedMessage:`${req.user.username} liked your post`}).remove();
     await post.save();
   } else {
     post.likes.push(req.user.id);
     post.likesCount = post.likesCount + 1;
+    if(req.user.id!==post.user._id.toString())
+    await Notification.create({receiver:[post.user._id],url:`/p/${post._id}`,type:"likedPost",sender:req.user.id,postId:post._id,notifiedMessage:`${req.user.username} liked your post`})
     await post.save();
   }
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({ success: true, data: {},notices:req.notices });
 });
 
 exports.addComment = asyncHandler(async (req, res, next) => {
@@ -216,7 +236,8 @@ exports.addComment = asyncHandler(async (req, res, next) => {
     post: req.params.id,
     text: req.body.text,
   });
-
+  if(req.user.id!==post.user._id.toString())
+    await Notification.create({receiver:[post.user._id],url:`/p/${post._id}/?commentId=${comment._id}`,commentId:comment._id,sender:req.user.id,postId:post._id,notifiedMessage:`${req.user.username} commented on your post`})
   post.comments.push(comment._id);
   post.commentsCount = post.commentsCount + 1;
   await post.save();
@@ -225,18 +246,19 @@ exports.addComment = asyncHandler(async (req, res, next) => {
     .populate({ path: "user", select: "avatar username fullname" })
     .execPopulate();
 
-  res.status(200).json({ success: true, data: comment });
+  res.status(200).json({ success: true, data: comment,notices:req.notices });
 });
 
 exports.deleteComment = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
-
+ 
   if (!post) {
     return next({
       message: `No post found for id ${req.params.id}`,
       statusCode: 404,
     });
   }
+  
 //   if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
 //     return next({
 //         message:"You are not authorised to access this post",
@@ -261,6 +283,10 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
       statusCode: 401,
     });
   }
+  await Notification.deleteOne({sender:req.user.id,postId:req.params.id,commentId:req.params.commentId},function(err,res){
+    if(err)
+     console.log(err);
+  });
 
   // remove the comment from the post
   const index = post.comments.indexOf(comment._id);
@@ -270,7 +296,7 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
 
   await comment.remove();
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({ success: true, data: {},notices:req.notices });
 });
 
 exports.searchPost = asyncHandler(async (req, res, next) => {
@@ -292,7 +318,7 @@ exports.searchPost = asyncHandler(async (req, res, next) => {
     posts = posts.concat([await Post.find({ tags: req.query.tag }).where({'accessibility': [...req.user.id]})]);
   }
 
-  res.status(200).json({ success: true, data: posts });
+  res.status(200).json({ success: true, data: posts,notices:req.notices});
 });
 exports.resolveComplaint = asyncHandler(async(req,res,next)=>{
   const post = await Post.findById(req.params.id);
@@ -310,6 +336,9 @@ exports.resolveComplaint = asyncHandler(async(req,res,next)=>{
   }
   post.resolved = req.body.markresolved;
   await post.save();
+  await Notification.find({sender:req.user.id,postId:req.params.id,type:"Resolved"}).remove();
+  await Notification.create({sender:req.user.id,postId:req.params.id,type:"Resolved",receiver:req.user.followers,notifiedMessage:`${req.user.username} marked one complain as ${post.resolved?"resolved":"unresolved"}`});
+  res.status(200).json({success:true,data:{},notices:req.notices});
 
 })
 exports.toggleSave = asyncHandler(async (req, res, next) => {
@@ -342,5 +371,5 @@ exports.toggleSave = asyncHandler(async (req, res, next) => {
     });
   }
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({ success: true, data: {},notices:req.notices });
 });
