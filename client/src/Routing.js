@@ -12,6 +12,7 @@ import Loader from "./components/utility/Loader";
 import Post from "./components/posts/Post";
 import EditProfile from "./components/dashboard/EditProfile";
 import CreateNew from './components/new/CreateNew';
+import ReportPost from "./components/posts/ReportPost";
 
 const Routing = () => {
   return (
@@ -23,6 +24,7 @@ const Routing = () => {
           <Route path="/highlight" component={Highlight} />
           <Route path="/accounts/new" component={CreateNew} />
           <Route path="/p/:postId" component={Post} />
+          <Route path="/report/:postId" component={ReportPost}/>
           <Route path="/accounts/edit" component={EditProfile} />          
           <Route path="/:username" component={Dashboard} />
           <Route path="/" component={Home} />

@@ -1,12 +1,11 @@
 import React, { useEffect, useState,useContext } from "react";
 import styled from "styled-components";
-import {ThemeContext} from "../../context/ThemeContext";
 import { useParams } from "react-router-dom";
 import PostProfilePreview from "./PostProfilePreview";
 import ProfileHeader from "./ProfileHeader";
 import Placeholder from "../utility/Placeholder";
 import Loader from "../utility/Loader";
-import { PostIcon, SavedIcon } from "../../Icons";
+import { PostIcon, SavedIcon,TaggedIcon } from "../../Icons";
 import { connect } from "../../utils/fetchdata";
 
 const Wrapper = styled.div`
@@ -27,6 +26,7 @@ const Wrapper = styled.div`
   .dashboard-tab svg {
     height: 24px;
     width: 24px;
+    fill: ${(props) => props.theme.primaryColor} !important;
   }
   hr {
     border: 0.5px solid ${(props) => props.theme.borderColor};
@@ -36,7 +36,7 @@ const Wrapper = styled.div`
 const Dashboard = () => {
   const [tab, setTab] = useState("POSTS");
   const [errmsg,setErr] = useState("Error in getting data");
-  const {theme} = useContext(ThemeContext);
+  
   const { username } = useParams();
   const [dashboard, setdashboard] = useState({});
   const [loading, setLoading] = useState(true);
@@ -82,13 +82,15 @@ const Dashboard = () => {
         <div
           style={{ fontWeight: tab === "SAVED" ? "500" : "" }}
           onClick={() => setTab("SAVED")}
-        >
-          <SavedIcon/>
-          <span>Saved</span>
+        >{
+          dashboard.isMe?(<><SavedIcon/><span>Saved</span></>):<><TaggedIcon/><span>Tagged</span></>
+        }
+          
         </div>
       </div>
 
       {tab === "POSTS" && (
+        dashboard?.isMe?(
         <>
           {dashboard?.posts?.length === 0 ? (
             <Placeholder
@@ -100,9 +102,23 @@ const Dashboard = () => {
             <PostProfilePreview posts={dashboard?.posts} />
           )}
         </>
+        ):(
+          <>
+          {dashboard?.posts?.length === 0 ? (
+            <Placeholder
+              title="Posts"
+              text="This user has not posted any complain yet"
+              icon="post"
+            />
+          ) : (
+            <PostProfilePreview posts={dashboard?.posts} />
+          )}
+        </>
+        )
       )}
 
       {tab === "SAVED" && (
+        dashboard?.isMe?
         <>
           {dashboard?.savedComplaints?.length === 0 ? (
             <Placeholder
@@ -113,7 +129,18 @@ const Dashboard = () => {
           ) : (
             <PostProfilePreview posts={dashboard?.savedComplaints} />
           )}
-        </>
+        </>:
+        <>
+        {dashboard?.taggedComplaints?.length === 0 ? (
+          <Placeholder
+            title="Tagged"
+            text="This user was not tagged in any complain"
+            icon="tagmark"
+          />
+        ) : (
+          <PostProfilePreview posts={dashboard?.taggedComplaints} />
+        )}
+      </>
       )}
     </Wrapper>
   );

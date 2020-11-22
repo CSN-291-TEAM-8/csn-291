@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import Button from "../../styles/Button";
 import { connect } from "../../utils/fetchdata";
 
-const Follow = ({ nobtn, isFollowing, incFollowers, decFollowers, userId }) => {
+const Follow = ({ nobtn, isFollowing, incFollowers, decFollowers, userId,myId }) => {
   const [followingState, setFollowingState] = useState(isFollowing);
-
+  
   useEffect(() => setFollowingState(isFollowing), [isFollowing]);
 
   const handleFollow = () => {
@@ -40,15 +40,15 @@ const Follow = ({ nobtn, isFollowing, incFollowers, decFollowers, userId }) => {
       </>
     );
   } else {
-    return (
-      <>
-        {nobtn ? (
+    return (      
+      <>      
+        {myId!=userId&&(nobtn ? (
           <span className="pointer" onClick={() => handleFollow()}>
             Follow
           </span>
         ) : (
           <Button onClick={() => handleFollow()}>Follow</Button>
-        )}
+        ))}
       </>
     );
   }

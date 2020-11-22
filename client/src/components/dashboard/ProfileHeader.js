@@ -10,7 +10,7 @@ import { UserContext } from "../../context/UserContext";
 import { OptionsIcon,CloseIcon } from "../../Icons";
 
 
-const MobileWrapper = styled.div`
+export const MobileWrapper = styled.div`
   margin: 1rem 0;
   font-size: 1rem;
   padding-left: 1rem;
@@ -38,7 +38,7 @@ const MobileWrapper = styled.div`
   }
 `;
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   font-size: 1.1rem;
@@ -98,6 +98,9 @@ const Wrapper = styled.div`
       display: block;
     }
   }
+  svg{
+    fill: ${(props) => props.theme.primaryColor} !important;
+  }
   @media screen and (max-width: 420px) {
     font-size: 0.9rem;
     .avatar {
@@ -107,7 +110,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const modalHeaderStyle = {
+export const modalHeaderStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
@@ -115,7 +118,7 @@ const modalHeaderStyle = {
   padding: "1rem",
 };
 
-const ModalContentWrapper = styled.div`
+export const ModalContentWrapper = styled.div` 
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -140,6 +143,7 @@ const ModalContentWrapper = styled.div`
     font-size: 0.9rem;
     position: relative;
     top: -10px;
+    color: ${(props) => props.theme.primaryColor} !important;
   }
   @media screen and (max-width: 480px) {
     width: 340px;
@@ -180,7 +184,7 @@ const ModalContent = ({ loggedInUser, users, closeModal, title }) => {
               <span>{user.fullname}</span>
             </div>
           </div>
-          <Follow isFollowing={user.isFollowing} userId={user._id} />
+          <Follow isFollowing={user.isFollowing} userId={user._id} myId={loggedInUser._id} />
         </ModalContentWrapper>
       ))}
     </div>
@@ -234,6 +238,7 @@ const ProfileHeader = ({ profile }) => {
                 incFollowers={incFollowers}
                 decFollowers={decFollowers}
                 userId={profile?._id}
+                myId={user._id}
               />
             )}
           </div>

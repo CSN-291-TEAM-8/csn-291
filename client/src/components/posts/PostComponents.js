@@ -5,12 +5,13 @@ import LikePost from "./LikePost";
 import SavedComplaints from "./SavedComplaints";
 import Comment from "./Comment";
 import DeletePost from "./DeletePost";
+import ResolveComplaints from "./ResolveComplaints";
 import Modal from "./Modal";
 import Modify from "../../hooks/Modify";
 import Avatar from "../../styles/Avatar";
 import { connect ,timeSince} from "../../utils/fetchdata";
 import {ThemeContext} from "../../context/ThemeContext";
-import { MoreIcon, CommentIcon, InboxIcon } from "../../Icons";
+import { MoreIcon, CommentIcon, InboxIcon ,TickIcon,CloseIcon} from "../../Icons";
 
 const ModalContentWrapper = styled.div`
   width: 300px;
@@ -20,6 +21,7 @@ const ModalContentWrapper = styled.div`
   span:last-child {
     border: none;
   }
+  
   span {
     display: block;
     padding: 1rem 0;
@@ -28,20 +30,26 @@ const ModalContentWrapper = styled.div`
   }
 `;
 
-export const ModalContent = ({ hideGotoPost, postId, closeModal }) => {
+export const ModalContent = ({ hideGotoPost, postId, closeModal,resolved,post,isMine}) => {
   const history = useHistory();  
   const handleGoToPost = () => {
     closeModal();
     history.push(`/p/${postId}`);
   };
-
+  const ReportPost=()=>{
+    history.push(`/report/${postId}`)
+  }
   return (
     <ModalContentWrapper>
       <span className="danger" onClick={closeModal}>
         Cancel
       </span>
-      <DeletePost postId={postId} closeModal={closeModal} goToHome={true} />
-      {!hideGotoPost && <span onClick={handleGoToPost}>Go to Post</span>}
+      {isMine?<DeletePost postId={postId} closeModal={closeModal} goToHome={true} />:
+      <span className="danger" onClick={ReportPost}>
+      Report
+    </span>}
+      {!hideGotoPost && <span onClick={handleGoToPost}>Go to Post</span>}      
+      {isMine&&<ResolveComplaints postId={postId} closeModal={closeModal} isMarkResolved={resolved} post={post} />}
     </ModalContentWrapper>
   );
 };
@@ -77,6 +85,11 @@ export const PostWrapper = styled.div`
   .post-actions svg:last-child {
     margin-left: auto;
   }
+  .post-img-inverted{
+    filter:invert(50%);
+    width: 100%;
+    height: 500px;
+  }
   svg {
     margin-right: 1rem;
   }
@@ -111,14 +124,17 @@ const PostComponents = ({ post }) => {
   const history = useHistory();
   const {theme} = useContext(ThemeContext);
   const [showModal, setShowModal] = useState(false);
-  const closeModal = () => setShowModal(false);
+  
+  const closeModal = () => {
+    setShowModal(false);    
+  }
 
   const [newComments, setNewComments] = useState([]);
   const [likesState, setLikes] = useState(post.likesCount);
 
   const incLikes = () => setLikes(likesState + 1);
   const decLikes = () => setLikes(likesState - 1);
-
+  
   const handleAddComment = (e) => {
     if (e.keyCode === 13) {
       e.preventDefault();
@@ -135,6 +151,7 @@ const PostComponents = ({ post }) => {
     <PostWrapper>
       <div className="post-header-wrapper">
         <div className="post-header">
+        {post.resolved&&<TickIcon/>}
           <Avatar
             className="pointer"
             src={post.user?.avatar}
@@ -151,17 +168,25 @@ const PostComponents = ({ post }) => {
 
         {showModal && (
           <Modal>
-            <ModalContent postId={post._id} closeModal={closeModal} />
+            <ModalContent isMine={post.isMine} postId={post._id} closeModal={closeModal} resolved={post.resolved} />
           </Modal>
         )}
-        {post.isMine && <MoreIcon theme={theme} onClick={() => setShowModal(true)} />}
+        
+        {<MoreIcon theme={theme} onClick={() => setShowModal(true)} />}
       </div>
-
+      {post.files[0]?
       <img
         className="post-img"
-        src={post.files[0]||"https://kkleap.github.io/assets/loaderi.gif"}
+        src={post.files[0]}
         alt="post-img"
       />
+      :
+      <img
+        className="post-img-inverted"        
+        src={"https://kkleap.github.io/assets/loaderi.gif"}
+        alt="post-img"
+      />
+}
 
       <div className="post-actions">
         <LikePost
@@ -177,7 +202,7 @@ const PostComponents = ({ post }) => {
 
       <div className="likes-caption-comments">
         {likesState !== 0 && (
-          <span className="likes bold">
+          <span className="likes bold" style={{cursor:"pointer"}} onClick={()=>history.push(`/p/${post._id}`)}>
             {likesState} {likesState > 1 ? "likes" : "like"}
           </span>
         )}

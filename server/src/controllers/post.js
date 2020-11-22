@@ -1,13 +1,24 @@
-const mongoose = require("mongoose");
 const Post = require("../models/Post");
 const User = require("../models/User");
+const Report = require("../models/Report");
 const Comment = require("../models/Comment");
 const asyncHandler = require("../middleware/asynchandler");
 
+
 exports.getPosts = asyncHandler(async (req, res, next) => {
   const posts = await Post.find({isPrivate:false});
-
+  posts.forEach(function(post){
+    let likes = [];
+    post.likes.forEach(function(id){
+      User.findById(id).then(user=>{
+        likes.push({username:user.username,id:id.toString(),avatar:user.avatar,fullname:user.fullname});        
+    })
+  })
+  post.likers = likes;
+})
+setTimeout(function(){
   res.status(200).json({ success: true, data: posts });
+},1000)
 });
 
 exports.getPost = asyncHandler(async (req, res, next) => {
@@ -33,6 +44,20 @@ exports.getPost = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
+  post.likers =[];
+  post.isLiked = post.likes.toString().includes(req.user.id);
+  post.likes.forEach(async function(id){
+    //console.log(id);
+    let user = await User.findById(id).lean().exec();    
+      //console.log(user);
+      if(user){
+        console.log(user);
+      post.likers.push({username:user.username,id:id.toString(),avatar:user.avatar,fullname:user.fullname});
+      
+      //console.log(likes)
+      }    
+  })
+  
   // if(post.accesibility.length>0&&!post.accesibility.includes(req.user.id)){
   //     return next({
   //         message:"You are not authorised to access this post",
@@ -41,11 +66,11 @@ exports.getPost = asyncHandler(async (req, res, next) => {
   // }
 
   // is the post belongs to loggedin user?
+
   post.isMine = req.user.id === post.user._id.toString();
 
   // is the loggedin user liked the post??
-  const likes = post.likes.map((like) => like.toString());
-  post.isLiked = likes.includes(req.user.id);
+  
 
   // is the loggedin user liked the post??
   const savedComplaints = req.user.savedComplaints.map((post) => post.toString());
@@ -60,10 +85,37 @@ exports.getPost = asyncHandler(async (req, res, next) => {
       comment.isCommentMine = true;
     }
   });
-
-  res.status(200).json({ success: true, data: post });
+  
+  setTimeout(function(){
+    console.log(post);    
+    res.status(200).json({ success: true, data: post });
+},1000)
 });
+exports.reportComplain = asyncHandler(async(req,res,next)=>{
+  const post = await Post.findById(req.params.id);
+  if (!post) {
+    return next({
+      message: `No post found for id ${req.params.id}`,
+      statusCode: 404,
+    });
+  }
+  if(post.isPrivate&&!post.accesibility.includes(req.user.id)){
+    return next({
+      message:"Access denied",
+      statusCode:401
+    })
+  }
+  if(post.user.toString()===req.user.id){
+    return next({
+      message:"HAHAHAHA!!DAMN Funny!Reporting your own post",
+      statusCode:401
+    })    
+  }
+  await Report.create({description:req.body.reportText,postId:req.params.id,reporter:req.user.id});
+  res.status(200).json({success:true,data:{}});
 
+  
+})
 exports.deletePost = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
@@ -237,7 +289,24 @@ exports.searchPost = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: posts });
 });
+exports.resolveComplaint = asyncHandler(async(req,res,next)=>{
+  const post = await Post.findById(req.params.id);
+  if(!post){
+    return next({
+      message: `No post found for id ${req.params.id}`,
+      statusCode: 404,
+    });
+  }
+  if (post.user.toString() !== req.user.id) {
+    return next({
+      message: "You are not authorized to do this action",
+      statusCode: 401,
+    });
+  }
+  post.resolved = req.body.markresolved;
+  await post.save();
 
+})
 exports.toggleSave = asyncHandler(async (req, res, next) => {
   // make sure that the post exists
   const post = await Post.findById(req.params.id);

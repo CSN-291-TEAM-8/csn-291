@@ -1,7 +1,7 @@
 import React,{useContext} from "react";
 import styled, { ThemeContext } from "styled-components";
-import { BookmarkIcon, PostIcon } from "../../Icons";
-import {FeedContext} from "../../context/FeedContext";
+import { BookmarkIcon, PostIcon,TaggedIcon } from "../../Icons";
+//import {FeedContext} from "../../context/FeedContext";
 
 const Wrapper = styled.div`
   margin: auto;
@@ -15,11 +15,13 @@ const Wrapper = styled.div`
     height: 50px;
     width: 50px;
     margin-bottom: 1rem;
+    fill: ${(props)=>props.theme.primaryColor} !important;
   }
   @media screen and (max-width: 500px) {
     svg {
       height: 35px;
       width: 35px;
+      
     }
     width: 350px;
   }
@@ -31,6 +33,7 @@ const Placeholder = ({ icon, title, text }) => {
     <Wrapper>
       {icon === "bookmark" && <BookmarkIcon theme={theme} />}
       {icon === "post" && <PostIcon theme={theme} />}
+      {icon=="tagmark"&&<TaggedIcon theme={theme}/>}
       <h2>{title}</h2>
       <p>{text}</p>
     </Wrapper>

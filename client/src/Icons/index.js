@@ -111,8 +111,7 @@ export const FilledHeartIcon = (props) => (
 export const FilledBookmarkIcon = (props) => (
   <svg
     {...props}
-    aria-label="Remove"
-    fill={props.theme.primaryColor}
+    aria-label="Remove"    
     height="24"
     viewBox="0 0 48 48"
     width="24"
@@ -120,7 +119,17 @@ export const FilledBookmarkIcon = (props) => (
     <path d="M43.5 48c-.4 0-.8-.2-1.1-.4L24 28.9 5.6 47.6c-.4.4-1.1.6-1.6.3-.6-.2-1-.8-1-1.4v-45C3 .7 3.7 0 4.5 0h39c.8 0 1.5.7 1.5 1.5v45c0 .6-.4 1.2-.9 1.4-.2.1-.4.1-.6.1z"></path>
   </svg>
 );
-
+export const TickIcon = ()=>(
+  <svg 
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" 
+    height="24" 
+    fill="#0F0"
+    viewBox="0 0 24 24"
+    >
+      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+      </svg>
+);
 export const MoreIcon = (props) => (
   <svg
     {...props}
@@ -172,7 +181,7 @@ export const PostIcon = (props) => (
 
 export const SavedIcon = (props) => (
   <svg
-    aria-label="Saved"
+    aria-label="Saved"    
     fill="#8e8e8e"
     height="12"
     viewBox="0 0 48 48"
@@ -181,7 +190,16 @@ export const SavedIcon = (props) => (
     <path d="M43.5 48c-.4 0-.8-.2-1.1-.4L24 29 5.6 47.6c-.4.4-1.1.6-1.6.3-.6-.2-1-.8-1-1.4v-45C3 .7 3.7 0 4.5 0h39c.8 0 1.5.7 1.5 1.5v45c0 .6-.4 1.2-.9 1.4-.2.1-.4.1-.6.1zM24 26c.8 0 1.6.3 2.2.9l15.8 16V3H6v39.9l15.8-16c.6-.6 1.4-.9 2.2-.9z"></path>
   </svg>
 );
-
+export const TaggedIcon =(props)=>(
+  <svg 
+  aria-label="Tagged" 
+  fill="#262626"
+  height="12"
+  viewBox="0 0 48 48"
+  width="12">
+    <path d="M41.5 5.5H30.4c-.5 0-1-.2-1.4-.6l-4-4c-.6-.6-1.5-.6-2.1 0l-4 4c-.4.4-.9.6-1.4.6h-11c-3.3 0-6 2.7-6 6v30c0 3.3 2.7 6 6 6h35c3.3 0 6-2.7 6-6v-30c0-3.3-2.7-6-6-6zm-29.4 39c-.6 0-1.1-.6-1-1.2.7-3.2 3.5-5.6 6.8-5.6h12c3.4 0 6.2 2.4 6.8 5.6.1.6-.4 1.2-1 1.2H12.1zm32.4-3c0 1.7-1.3 3-3 3h-.6c-.5 0-.9-.4-1-.9-.6-5-4.8-8.9-9.9-8.9H18c-5.1 0-9.4 3.9-9.9 8.9-.1.5-.5.9-1 .9h-.6c-1.7 0-3-1.3-3-3v-30c0-1.7 1.3-3 3-3h11.1c1.3 0 2.6-.5 3.5-1.5L24 4.1 26.9 7c.9.9 2.2 1.5 3.5 1.5h11.1c1.7 0 3 1.3 3 3v30zM24 12.5c-5.3 0-9.6 4.3-9.6 9.6s4.3 9.6 9.6 9.6 9.6-4.3 9.6-9.6-4.3-9.6-9.6-9.6zm0 16.1c-3.6 0-6.6-2.9-6.6-6.6 0-3.6 2.9-6.6 6.6-6.6s6.6 2.9 6.6 6.6c0 3.6-3 6.6-6.6 6.6z"></path>
+    </svg>
+);
 export const OptionsIcon = (props) => (
   <svg
     {...props}

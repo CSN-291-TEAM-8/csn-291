@@ -13,8 +13,8 @@ import { ModalContent } from "./PostComponents";
 import modify from "../../hooks/Modify";
 import { timeSince,connect } from "../../utils/fetchdata";
 import {ThemeContext} from "../../context/ThemeContext";
-import { MoreIcon, CommentIcon, InboxIcon } from "../../Icons";
-
+import { MoreIcon, CommentIcon, InboxIcon,TickIcon,CloseIcon} from "../../Icons";
+import {MobileWrapper,modalHeaderStyle,ModalContentWrapper} from "../dashboard/ProfileHeader";
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 60% 1fr;
@@ -28,6 +28,10 @@ const Wrapper = styled.div`
     padding: 1rem;
     border-bottom: 1px solid ${(props) => props.theme.borderColor};
   }
+  svg[aria-label="saved"]{
+    fill: ${(props) => props.theme.primaryColor} !important;
+  }
+  
   .post-header {
     display: flex;
     align-items: center;
@@ -36,6 +40,7 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    
   }
   .post-actions-stats {
     padding: 1rem;
@@ -63,6 +68,12 @@ const Wrapper = styled.div`
   svg {
     margin-right: 1rem;
   }
+  .post-img-inverted{
+    filter:invert(50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
   textarea {
     height: 43px;
     width: 100%;
@@ -77,9 +88,26 @@ const Wrapper = styled.div`
   @media screen and (max-width: 840px) {
     display: flex;
     flex-direction: column;
-    .comments {
-      height: 100%;
-    }
+    
+
+ .post-info{
+   display:flex;
+   flex-direction:column;
+ }
+ .comments {
+  height: 100%;
+  order:5
+}
+.post-actions-state{
+  order:2;
+}
+ .secondry{
+   order:3;
+ }
+ .add-comment{
+   order:4;
+   border:1px solid #3333;
+ }
   }
 `;
 
@@ -89,10 +117,20 @@ const Post = () => {
   const {theme} = useContext(ThemeContext);
   const comment = modify("");
   const commmentsEndRef = useRef(null);
-
+  const [showlikes,setShowLikes] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const closeModal = () => setShowModal(false);
-
+  const closeModal = () => {
+    setShowModal(false);
+    setShowLikes(false);
+  }
+  const showlikewalaModal = ()=>{
+    // if(screen.availWidth<600){
+    //   history.push(`/likes/${post._id}`)
+    // }
+    // else{
+      setShowLikes(true);
+    //}
+  }
   const [err,setErr] = useState("The requested post was not found");
   const [loading, setLoading] = useState(true);
   const [notFound, setnotFound] = useState(false);
@@ -150,15 +188,23 @@ const Post = () => {
 
   return (
     <Wrapper>
+      {post.files[0]?
       <img
         className="post-img"
-        src={post.files[0]||"https://kkleap.github.io/assets/loaderi.gif"}
-        alt="post"
+        src={post.files[0]}
+        alt="post-img"
       />
-
+      :
+      <img
+        className="post-img-inverted"        
+        src={"https://kkleap.github.io/assets/loaderi.gif"}
+        alt="post-img"
+      />
+}
       <div className="post-info">
         <div className="post-header-wrapper">
           <div className="post-header">
+            {post.resolved&&<TickIcon/>}
             <Avatar
               onClick={() => history.push(`/${post.user?.username}`)}
               className="pointer avatar"
@@ -173,17 +219,102 @@ const Post = () => {
               {post.user?.username}
             </h3>
           </div>
-          {post.isMine && <MoreIcon theme={theme} onClick={() => setShowModal(true)} />}
+          {<MoreIcon theme={theme} onClick={() => setShowModal(true)} />}
 
           {showModal && (
             <Modal>
               <ModalContent
                 postId={post._id}
+                isMine={post.isMine}
+                post={post}
                 hideGotoPost={true}
                 closeModal={closeModal}
+                resolved={post.resolved}
               />
             </Modal>
           )}
+          {
+          showlikes&&(
+            <>
+            <Modal>
+            <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+            <div style={modalHeaderStyle}>
+              <h3>Liked By</h3>
+              <CloseIcon onClick={closeModal} theme={theme} />
+            </div>
+            {post.likers.map((user) => (
+              <ModalContentWrapper key={user.id}>
+                <div className="profile-info">
+                  <img
+                    className="pointer"
+                    onClick={() => {
+                      closeModal();
+                      history.push(`/${user.username}`);
+                    }}
+                    src={user.avatar}
+                    alt="avatar"
+                  />
+                  <div className="user-info">
+                    <h3
+                      className="pointer"
+                      onClick={() => {
+                        closeModal();
+                        history.push(`/${user.username}`);
+                      }}
+                    >
+                      {user.username}
+                    </h3>
+                    <span>{user.fullname}</span>
+                  </div>
+                </div>
+                
+              </ModalContentWrapper>
+              
+            ))}
+          </div>
+          </Modal>
+          <MobileWrapper>
+            <Modal>
+            <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+            <div style={modalHeaderStyle}>
+              <h3>Liked By</h3>
+              <CloseIcon onClick={closeModal} theme={theme} />
+            </div>
+            {post.likers.map((user) => (
+              <ModalContentWrapper key={user.id}>
+                <div className="profile-info">
+                  <img
+                    className="pointer"
+                    onClick={() => {
+                      closeModal();
+                      history.push(`/${user.username}`);
+                    }}
+                    src={user.avatar}
+                    alt="avatar"
+                  />
+                  <div className="user-info">
+                    <h3
+                      className="pointer"
+                      onClick={() => {
+                        closeModal();
+                        history.push(`/${user.username}`);
+                      }}
+                    >
+                      {user.username}
+                    </h3>
+                    <span>{user.fullname}</span>
+                  </div>
+                </div>
+                
+              </ModalContentWrapper>
+              
+            ))}
+          </div>
+          </Modal>
+          </MobileWrapper>
+          </>
+          )
+        }
         </div>
 
         <div className="comments">
@@ -207,7 +338,7 @@ const Post = () => {
           </div>
 
           {likesState !== 0 && (
-            <span className="likes bold">
+            <span className="likes bold" style={{cursor:"pointer"}} onClick={showlikewalaModal}>
               {likesState} {likesState > 1 ? "likes" : "like"}
             </span>
           )}
@@ -229,9 +360,10 @@ const Post = () => {
             onKeyDown={handleAddComment}
           ></textarea>
         </div>
-      </div>
+      </div>     
     </Wrapper>
   );
+  
 };
 
 export default Post;

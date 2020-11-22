@@ -56,7 +56,8 @@ const userSchema = new schema({
   postCount: {
     type: Number,
     default: 0,
-  },  
+  },
+  taggedComplaints:[{type:mongoose.Schema.ObjectId,ref:"Post"}],
   savedComplaints: [{ type: mongoose.Schema.ObjectId, ref: "Post" }],
   createdAt: {
     type: Date,

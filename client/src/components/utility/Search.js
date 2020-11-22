@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import {connect} from "../../utils/fetchdata"; ///LEFT PART
@@ -16,18 +16,17 @@ const InputWrapper = styled.input`
 
 const Search = () => {
   const searchterm = Modify("");//not fully implemented
-
-  const handleSearch = (e) => {
-    //   const [Search,setSearch] = useState([]);
-    //   window.search&&clearTimeout(window.search);
-    // window.search = setTimeout(function(){
-    //     connect(`/search/?query=${searchterm.value}`).then((response) => {
-    //         setSearch(response.data);
-    //         console.log(Search);
-    //       });
-    //   searchterm.setValue("");
-    //   return toast.success("success");
-    // },500)
+  const [Search,setSearch] = useState([]);
+  const handleSearch = (e) => {   
+     if(e.keyCode==13){
+        connect(`/user/search/${searchterm.value}`).then((response) => {
+            setSearch(response.data);
+            console.log(Search);
+          });
+        }
+      //searchterm.setValue("");
+      //return toast.success("success");
+    
   };
 
   return (

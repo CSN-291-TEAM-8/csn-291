@@ -86,7 +86,9 @@ const ProfileForm = () => {
     if (e.target.files[0]) {
       uploadImage(e.target.files[0]).then((res) =>
         setNewAvatar(res.secure_url)
-      );
+      ).catch((err)=>{
+        return toast.error(err.message);
+      });
     }
   };
 

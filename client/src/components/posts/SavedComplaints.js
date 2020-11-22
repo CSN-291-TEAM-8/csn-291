@@ -5,7 +5,8 @@ import {ThemeContext} from "../../context/ThemeContext";
 
 const SavedComplaints = ({ isSaved, postId }) => {
   const [savedState, setSaved] = useState(isSaved);
-  const {theme} = useContext(ThemeContext);
+  let {theme} = useContext(ThemeContext);
+  theme = `${theme.primaryColor}`;
   useEffect(() => {
     setSaved(isSaved);
   }, [isSaved]);
@@ -21,11 +22,11 @@ const SavedComplaints = ({ isSaved, postId }) => {
   };
 
   if (savedState) {
-    return <FilledBookmarkIcon theme={theme} onClick={handleToggleSave} />;
+    return <FilledBookmarkIcon fill={theme} onClick={handleToggleSave} />;
   }
 
   if (!savedState) {
-    return <BookmarkIcon theme={theme} onClick={handleToggleSave} />;
+    return <BookmarkIcon fill={theme} onClick={handleToggleSave} />;
   }
 };
 

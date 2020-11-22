@@ -23,9 +23,13 @@ const PostSchema = new mongoose.Schema({
     default:[],
     required:[true,"Please mention who else should be able to see your complain"]
   },
+  resolved:{
+    type:Boolean,
+    default:false
+  },
   files: {
     type: [String],
-    default:["https://kkleap.github.io/assets/loader.gif"],
+    default:["https://kkleap.github.io/assets/loaderi.gif"],
     validate: (v) => v === null || v.length > 0,
   },
   likes: [{ type: mongoose.Schema.ObjectId, ref: "User" }],

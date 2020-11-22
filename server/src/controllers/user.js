@@ -20,7 +20,9 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 });
 
 exports.getUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findOne({ username: req.params.username })
+  let user = await User.findOne({ username: req.params.username });
+  if(user._id.toString()===req.user.id){
+    user = await User.findOne({ username: req.params.username })
     .select("-password")
     .populate({ path: "posts", select: "files commentsCount likesCount" })
     .populate({ path: "savedComplaints", select: "files commentsCount likesCount" })
@@ -28,6 +30,17 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     .populate({ path: "following", select: "avatar username fullname" })     
     .lean()
     .exec();
+  }
+  else{
+    user = await User.findOne({ username: req.params.username })
+    .select("-password")
+    .populate({ path: "posts", select: "files commentsCount likesCount" })
+    .populate({ path: "taggedComplaints", select: "files commentsCount likesCount" })
+    .populate({ path: "followers", select: "avatar username fullname" })
+    .populate({ path: "following", select: "avatar username fullname" })     
+    .lean()
+    .exec();
+  }
 
   if (!user) {
     return next({
@@ -40,16 +53,16 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   const followers = user.followers.map((friend) => friend._id.toString());
 
   user.followers.forEach((friend) => {
-    friend.isFollower = false;
-    if (req.user.followers.includes(friend._id.toString())) {
-      friend.isFollower = true;
+    friend.isFollowing = false;
+    if (req.user.following.includes(friend._id.toString())) {
+      friend.isFollowing = true;
     }
   });
 
-  user.following.forEach((user) => {
-    user.isFollowing = false;
-    if (req.user.following.includes(user._id.toString())) {
-      user.isFollowing = true;
+  user.following.forEach((friend) => {
+    friend.isFollowing = false;
+    if (req.user.following.includes(friend._id.toString())) {
+      friend.isFollowing = true;
     }
   });
 
@@ -58,7 +71,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   }
 
   user.isMe = req.user.id === user._id.toString();
-  console.log(user);
+  console.log("\n\n\nreq.user",user);
   res.status(200).json({ success: true, data: user });
 });
 
@@ -177,14 +190,19 @@ exports.publicfeed = asyncHandler(async (req, res, next) => {
 });
 
 exports.searchUser = asyncHandler(async (req, res, next) => {
-  if (!req.query.username) {
+  
+  if (!req.params.reg) {
     return next({ message: "The username cannot be empty", statusCode: 400 });
   }
 
-  const regex = new RegExp(req.query.username, "i");
-  const users = await User.find({ username: regex });
-
-  res.status(200).json({ success: true, data: users });
+  const regex = new RegExp(req.params.reg, "i");
+  
+  //let users = await User.find({ username: regex});
+ User.find({fullname:regex}).then((data)=>{
+  res.status(200).json({ success: true, data });
+ });
+  //let searchresult = users.concat(users2); 
+ 
 });
 
 exports.editDetails = asyncHandler(async (req, res, next) => {

@@ -105,10 +105,10 @@ const PostProfilePreview = ({ posts }) => {
           <img src={post.files[0]||"https://kkleap.github.io/assets/loaderi.gif"} alt="post" />
           <div className="overlay">
             <div className="overlay-content">
-              <span>
+              <span style={{color:"white !important"}}>
                 <HeartIcon theme={theme}/> {post.likesCount}
               </span>
-              <span>
+              <span style={{color:"white !important"}}>
                 <CommentIcon theme={theme}/> {post.commentsCount}
               </span>
             </div>
