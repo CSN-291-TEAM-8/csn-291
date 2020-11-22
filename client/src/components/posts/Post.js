@@ -154,7 +154,7 @@ const Post = () => {
       }).then((resp) => {
         if(!localStorage.getItem("deleteinst")){
           localStorage.setItem("deleteinst",true);
-          toast.success("Longpress your comment to delete it");
+          toast.success("Longpress your any comment to delete it");
         }
         resp.data.isCommentMine = true;
         setComments([...commentsState, resp.data]);

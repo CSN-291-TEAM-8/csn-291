@@ -23,11 +23,11 @@ const ResolveComplaints = ({ postId, closeModal, isMarkResolved,post }) => {
 
   return (
       isMarkResolved?
-    <span className="success" onClick={handleResolve}>
+    <span style={{color:"#FF0"}} onClick={handleResolve}>
       Mark unresolved
     </span>
     :
-    <span className="success" onClick={handleResolve}>
+    <span style={{color:"#0F0"}} onClick={handleResolve}>
       Mark resolved
     </span>
   );

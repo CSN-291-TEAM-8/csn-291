@@ -14,7 +14,7 @@ const Signup = ({ login }) => {
   const { setUser } = useContext(UserContext);
   
   const email = modify("");
-  const [Sign,ShowSignUpButton] = useState(false);
+  const [Sign,ShowSignUpButton] = useState(true);
   const [OTPS,showOTPInput] = useState(false);
   const [dis,setDis] = useState(false);
   const [val,setval] = useState("Request OTP");
