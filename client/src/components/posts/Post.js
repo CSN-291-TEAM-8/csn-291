@@ -152,6 +152,11 @@ const Post = () => {
       connect(`/complain/${post._id}/comments`, {
         body: { text: comment.value },
       }).then((resp) => {
+        if(!localStorage.getItem("deleteinst")){
+          localStorage.setItem("deleteinst",true);
+          toast.success("Longpress your comment to delete it");
+        }
+        resp.data.isCommentMine = true;
         setComments([...commentsState, resp.data]);
         scrollToBottom();
       }).catch((err) => {toast.error(err.message)});
@@ -159,6 +164,12 @@ const Post = () => {
       comment.setValue("");
     }
   };
+  const commentsStateF=({commentId})=>{
+    //console.log(commentId);
+    const comments = commentsState.filter((comment)=>{return comment._id!==commentId});
+    //console.log(comments);      
+    setComments(comments);
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -176,7 +187,7 @@ const Post = () => {
   if (!notFound && loading) {
     return <Loader />;
   }
-
+  
   if (notFound) {
     return (
       <Placeholder
@@ -319,7 +330,7 @@ const Post = () => {
 
         <div className="comments">
           {commentsState.map((comment) => (
-            <Comment key={comment._id} comment={comment} />
+            <Comment key={comment._id} postId={post._id} comment={comment} commentsStateF={commentsStateF} />
           ))}
           <div ref={commmentsEndRef} />
         </div>

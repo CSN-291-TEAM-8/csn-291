@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import { toast } from "react-toastify";
+//import { toast } from "react-toastify";
 import styled from "styled-components";
 import {connect} from "../../utils/fetchdata"; ///LEFT PART
 import Modify from "../../hooks/Modify";
@@ -18,7 +18,7 @@ const Search = () => {
   const searchterm = Modify("");//not fully implemented
   const [Search,setSearch] = useState([]);
   const handleSearch = (e) => {   
-     if(e.keyCode==13){
+     if(e.keyCode===13){
         connect(`/user/search/${searchterm.value}`).then((response) => {
             setSearch(response.data);
             console.log(Search);

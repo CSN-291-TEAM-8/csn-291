@@ -1,10 +1,12 @@
 const express = require("express");
+
 const router = express.Router();
 const {
   getPosts,
   getPost,
   addPost,
   deletePost,
+  Highlight,
   toggleLike,
   toggleSave,
   resolveComplaint,
@@ -17,6 +19,7 @@ const { Verify } = require("../middleware/auth");
 
 router.route("/").get(getPosts).post(Verify, addPost);
 router.route("/search").get(searchPost);
+router.route("/highlight").get(Verify,Highlight);
 router.route("/resolve/:id").post(Verify,resolveComplaint);
 router.route("/:id").get(Verify, getPost).delete(Verify, deletePost);
 router.route("/:id/togglelike").get(Verify, toggleLike);

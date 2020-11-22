@@ -42,7 +42,7 @@ const Follow = ({ nobtn, isFollowing, incFollowers, decFollowers, userId,myId })
   } else {
     return (      
       <>      
-        {myId!=userId&&(nobtn ? (
+        {myId!==userId&&(nobtn ? (
           <span className="pointer" onClick={() => handleFollow()}>
             Follow
           </span>

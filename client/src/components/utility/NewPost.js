@@ -50,7 +50,7 @@ const NewPost = (props) => {
   const [postImage, setPostImage] = useState("");
 
   const handleUploadImage = (e) => {
-    if (e.target.files[0]&&e.target.files[0].type.split('/')[0]=='image') {      
+    if (e.target.files[0]&&e.target.files[0].type.split('/')[0]==='image') {      
         setPreview(URL.createObjectURL(e.target.files[0]));
         setShowModal(true);     
 

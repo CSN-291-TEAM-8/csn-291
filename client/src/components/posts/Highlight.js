@@ -13,7 +13,7 @@ const Highlight = () => {
       setLoading(false);
     }).catch(err=>{
       if(!err.success){
-        window.location.assign('/');
+        //window.location.assign('/');
       }
     });
   }, []);
@@ -25,7 +25,7 @@ const Highlight = () => {
   return (
     <>
       <div style={{ marginTop: "2.3rem" }}>
-        <h2>Trended complains</h2>
+        <h2>Trended complaints</h2>
         <PostProfilePreview posts={posts} />
       </div>
     </>

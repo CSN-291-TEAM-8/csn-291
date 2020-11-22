@@ -91,6 +91,11 @@ exports.getPost = asyncHandler(async (req, res, next) => {
     res.status(200).json({ success: true, data: post });
 },1000)
 });
+exports.Highlight = asyncHandler(async(req,res,next)=>{
+  const post = await Post.find({isPrivate:false,resolved:false}).sort({commentsCount:-1,likesCount:-1});
+  console.log(post);
+  res.status(200).json({success:true,data:post});
+}) 
 exports.reportComplain = asyncHandler(async(req,res,next)=>{
   const post = await Post.findById(req.params.id);
   if (!post) {

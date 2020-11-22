@@ -33,7 +33,7 @@ const Placeholder = ({ icon, title, text }) => {
     <Wrapper>
       {icon === "bookmark" && <BookmarkIcon theme={theme} />}
       {icon === "post" && <PostIcon theme={theme} />}
-      {icon=="tagmark"&&<TaggedIcon theme={theme}/>}
+      {icon==="tagmark"&&<TaggedIcon theme={theme}/>}
       <h2>{title}</h2>
       <p>{text}</p>
     </Wrapper>

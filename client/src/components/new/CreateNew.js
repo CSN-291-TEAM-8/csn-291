@@ -51,7 +51,7 @@ const CreateNew = () => {
   const [postImage, setPostImage] = useState("");
 
   const handleUploadImage = (e) => {
-    if (e.target.files[0] && e.target.files[0].type.split('/')[0] == 'image') {
+    if (e.target.files[0] && e.target.files[0].type.split('/')[0] === 'image') {
       const reader = new FileReader();
 
       reader.onload = (e) => {

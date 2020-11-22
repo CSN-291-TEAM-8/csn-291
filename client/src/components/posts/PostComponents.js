@@ -11,9 +11,9 @@ import Modify from "../../hooks/Modify";
 import Avatar from "../../styles/Avatar";
 import { connect ,timeSince} from "../../utils/fetchdata";
 import {ThemeContext} from "../../context/ThemeContext";
-import { MoreIcon, CommentIcon, InboxIcon ,TickIcon,CloseIcon} from "../../Icons";
+import { MoreIcon, CommentIcon, InboxIcon ,TickIcon} from "../../Icons";
 
-const ModalContentWrapper = styled.div`
+export const ModalContentWrapper = styled.div`
   width: 300px;
   display: flex;
   flex-direction: column;
