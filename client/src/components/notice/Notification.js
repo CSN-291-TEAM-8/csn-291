@@ -118,7 +118,7 @@ if (loading) {
                         ))
                     }
                 </div>):
-            <h3>Right now ,there is no suggestions for you.</h3>
+            <h3 style={{padding:"20px 10px"}}>Right now ,there is no suggestions for you.</h3>
            }
         </div>            
         </>
@@ -150,7 +150,7 @@ if (loading) {
                         ))
                     }
                 </div>):
-            <h3>Right now ,there is no suggestions for you.</h3>
+            <h3 style={{padding:"20px 10px"}}>Right now ,there is no suggestions for you.</h3>
            }
         </div>         
       )}

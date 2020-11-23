@@ -160,7 +160,7 @@ exports.addPost = asyncHandler(async (req, res, next) => {
   else{
     let receiver = req.user.followers;
     if(receiver)
-    receiver.concat(tags);
+    receiver = receiver.concat(tags);
     console.log(receiver);
     await Notification.create({receiver:receiver,avatar:files[0],sender:user,postId:post._id,type:"newPost",url:`/p/${post._id}`,notifiedMessage:`${req.user.username} added a general complaint post.Click to view it`});
   }

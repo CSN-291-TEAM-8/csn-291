@@ -111,7 +111,7 @@ const CreateNew = () => {
   })
 }
   const handleUploadImage = (e) => {
-    if (e.target.files[0]) {  
+    if (e.target.files[0]&&e.target.files[0].type.split('/')[0]=='image') {  
       toast.success('uploading your pic...');    
       uploadImage(e.target.files[0]).then((res) => {
         setPreview(true);
@@ -121,7 +121,7 @@ const CreateNew = () => {
       });
     }
     else {
-      return toast.error("Kindly upload a pic");
+      return toast.error("Kindly upload a pic preferably of format jpeg,jpg ,png or webp");
     }
   };
  const switchTag = ()=>{
@@ -143,11 +143,11 @@ const CreateNew = () => {
        return toast.error("please Add a pic");
 
      }
-    setShowModal(false);   
-    if(privates&&!privatesTags){
+    
+    if(privates&&privatesTags.length==0){
       return toast.error("Please add tags of those who should see this complain");
     }
-    
+    setShowModal(false);   
     const newPost = {
       caption: detail.value,
       files: [postImage],
