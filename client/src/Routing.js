@@ -7,7 +7,7 @@ import Container from "./styles/Container";
 import Home from "./components/home/Home";
 import Dashboard from "./components/dashboard/Dashboard";
 import Highlight from "./components/posts/Highlight";
-//import Notification from "./components/notice/Notification";
+import Notification from "./components/notice/Notification";
 import Loader from "./components/utility/Loader";
 import Post from "./components/posts/Post";
 import EditProfile from "./components/dashboard/EditProfile";
@@ -23,6 +23,7 @@ const Routing = () => {
         <Switch>
           <Route path="/highlight" component={Highlight} />
           <Route path="/accounts/new" component={CreateNew} />
+          <Route path="/accounts/notifications" component={Notification} />
           <Route path="/p/:postId" component={Post} />
           <Route path="/report/:postId" component={ReportPost}/>
           <Route path="/accounts/edit" component={EditProfile} />          

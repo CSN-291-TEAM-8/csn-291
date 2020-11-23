@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../styles/Button";
 import { connect } from "../../utils/fetchdata";
+import {logout} from "../home/Home";
 
 const Follow = ({ nobtn, isFollowing, incFollowers, decFollowers, userId,myId }) => {
   const [followingState, setFollowingState] = useState(isFollowing);
@@ -13,13 +14,23 @@ const Follow = ({ nobtn, isFollowing, incFollowers, decFollowers, userId,myId })
       if (decFollowers) {
         decFollowers();
       }
+      try{
       connect(`/user/${userId}/unfriend`);
+      }
+      catch(err){
+        err.logout&&logout();
+      }
     } else {
       setFollowingState(true);
       if (incFollowers) {
         incFollowers();
       }
+      try{
       connect(`/user/${userId}/friend`);
+      }
+      catch(err){
+        err.logout&&logout();
+      }
     }
   };
 

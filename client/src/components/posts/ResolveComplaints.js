@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import { FeedContext } from "../../context/FeedContext";
 import { connect } from "../../utils/fetchdata";
+import {logout} from "../home/Home";
 
 const ResolveComplaints = ({ postId, closeModal, isMarkResolved,post }) => {
   const { feed, setFeed } = useContext(FeedContext);  
@@ -18,7 +19,13 @@ const ResolveComplaints = ({ postId, closeModal, isMarkResolved,post }) => {
     const body = {
         markresolved:!isMarkResolved
     }
+    try{
     connect(`/complain/resolve/${postId}`, { body });
+    }
+    catch(err){
+      if(err.logout)
+       logout();
+    }
   };
 
   return (

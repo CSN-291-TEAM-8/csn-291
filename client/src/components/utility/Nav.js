@@ -2,11 +2,10 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ThemeContext } from "../../context/ThemeContext";
-import NewPost from "./NewPost";
 import Search from "./Search";
 import { UserContext } from "../../context/UserContext";
 import navlogo from "../../assets/navlogo.png";
-import { HomeIcon, HighlightIcon, BellIcon } from "../../Icons";
+import { HomeIcon, HighlightIcon, BellIcon ,NewPostIcon} from "../../Icons";
 
 const NavWrapper = styled.div`
   position: fixed;
@@ -19,6 +18,9 @@ const NavWrapper = styled.div`
   .nav-logo {
     position: relative;
     top: 6px;
+  }
+  svg{
+    fill:${(props)=>props.theme.primaryColor}
   }
   nav {
     display: flex;
@@ -50,7 +52,7 @@ const NavWrapper = styled.div`
     }
     ul{
       position:fixed;
-      top:calc(100% - 42px);
+      top:calc(100% - 40px);
       background-color: ${(props) => props.theme.white};
       border-top: 1px solid ${(props) => props.theme.borderColor};
       justify-content:space-between;
@@ -82,20 +84,22 @@ const Nav = () => {
         <ul className="navlink" style={{display:"flex",alignItems:"center"}}>
           <li>
             <Link to="/" >
-              <HomeIcon activeClassName="active" theme={theme}/>
+              <HomeIcon activeclassname="active" theme={theme}/>
             </Link>
           </li>
           <li>
-            <NewPost activeClassName="active" theme={theme}/>
+          <Link to="/accounts/new" >
+            <NewPostIcon activeclassname="active" theme={theme}/>
+          </Link>
           </li>
           <li>
             <Link to="/highlight">
-              <HighlightIcon activeClassName="active" theme={theme}/>
+              <HighlightIcon activeclassname="active" theme={theme}/>
             </Link>
           </li>          
           <li>
           <Link to="/accounts/notifications">
-            <BellIcon activeClassName="active" theme={theme}/>
+            <BellIcon activeclassname="active" theme={theme}/>
             </Link>
           </li>
           <li>

@@ -6,6 +6,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { connect } from "../../utils/fetchdata";
 import modify from "../../hooks/Modify";
 import {Wrapper} from "../dashboard/ProfileForm";
+import {logout} from "../home/Home";
 
 const TopWrapper = styled.div`
   width: 930px;
@@ -46,6 +47,7 @@ const ReportPost = () => {
         toast.success("Thanks!We will take necessary action!");
         history.push('/')
     }).catch(err=>{
+      err.logout&&logout();
         toast.error(err.message);
     });
     }

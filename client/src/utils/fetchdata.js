@@ -69,7 +69,8 @@ export const timeSince = (timestamp) => {
   export const uploadImage = (file) => {
     const data = new FormData();
     data.append("file", file);
-    data.append("upload_preset", "complainlodger");
+    data.append("upload_preset", "complaintlodgeriitr");
+    data.append('cloud_name',"dzi99jhwn");
   
     return fetch(process.env.REACT_APP_UPLOAD_URL, {
       method: "POST",

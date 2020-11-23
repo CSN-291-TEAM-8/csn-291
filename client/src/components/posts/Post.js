@@ -13,6 +13,7 @@ import { ModalContent } from "./PostComponents";
 import modify from "../../hooks/Modify";
 import { timeSince,connect } from "../../utils/fetchdata";
 import {ThemeContext} from "../../context/ThemeContext";
+import {logout} from "../home/Home";
 import { MoreIcon, CommentIcon, InboxIcon,TickIcon,CloseIcon} from "../../Icons";
 import {MobileWrapper,modalHeaderStyle,ModalContentWrapper} from "../dashboard/ProfileHeader";
 const Wrapper = styled.div`
@@ -159,7 +160,7 @@ const Post = () => {
         resp.data.isCommentMine = true;
         setComments([...commentsState, resp.data]);
         scrollToBottom();
-      }).catch((err) => {toast.error(err.message)});
+      }).catch((err) => {err.logout&&logout();toast.error(err.message)});
 
       comment.setValue("");
     }
@@ -181,7 +182,7 @@ const Post = () => {
         setLoading(false);
         setnotFound(false);
       })
-      .catch((err) => {setErr("This complain post is non-accessible");setnotFound(true)});
+      .catch((err) => {err.logout&&logout();setErr("This complain post is non-accessible");setnotFound(true)});
   }, [postId]);
 
   if (!notFound && loading) {

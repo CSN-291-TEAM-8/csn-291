@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PostProfilePreview from "../dashboard/PostProfilePreview";
 import Loader from "../utility/Loader";
 import { connect } from "../../utils/fetchdata";
-
+import {logout} from "../home/Home";
 const Highlight = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
@@ -12,8 +12,8 @@ const Highlight = () => {
       setPosts(res.data);
       setLoading(false);
     }).catch(err=>{
-      if(!err.success){
-        //window.location.assign('/');
+      if(err.logout){
+        logout();
       }
     });
   }, []);
@@ -25,7 +25,7 @@ const Highlight = () => {
   return (
     <>
       <div style={{ marginTop: "2.3rem" }}>
-        <h2>Trended complaints</h2>
+        <h2>Trending complaints</h2>
         <PostProfilePreview posts={posts} />
       </div>
     </>

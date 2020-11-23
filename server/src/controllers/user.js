@@ -19,9 +19,23 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: users,notices:req.notices });
 });
+exports.checkUser = asyncHandler(async (req, res, next) => {
 
+  User.findOne({username:req.params.username}).then((user)=>{
+    if(user)
+      res.status(200).json({success:true});
+    else
+      res.status(404).json({success:false});
+  }).catch((err)=>{
+     return next({
+      message: `The user ${req.params.username} is not found`,
+      statusCode: 404,
+    });
+  })
+})
 exports.getUser = asyncHandler(async (req, res, next) => {
   let user = await User.findOne({ username: req.params.username });
+  setTimeout(async function(){
   if(user._id.toString()===req.user.id){
     user = await User.findOne({ username: req.params.username })
     .select("-password")
@@ -74,8 +88,23 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   user.isMe = req.user.id === user._id.toString();
   console.log("\n\n\nreq.user",user);
   res.status(200).json({ success: true, data: user,notices:req.notices });
+},500)
 });
-
+exports.sendNotice = asyncHandler(async (req,res,next) =>{
+  //console.log(req.notices);
+  if(req.user){
+    Notification.find({}).sort({createdAt:-1}).then((notices)=>{
+      //console.log(notices);
+      notices = notices.filter(function(notice){
+          return notice.receiver.includes(req.user.id)||notice.receiver.includes(req.user.username);
+      })
+      console.log(notices);
+      res.status(200).json({success:true,notices});
+  })
+}
+  else
+    return next({success:false,message:"Unable to verify user"});
+});
 exports.follow = asyncHandler(async (req, res, next) => {
   // make sure the user exists
   const user = await User.findById(req.params.id);
@@ -104,6 +133,7 @@ exports.follow = asyncHandler(async (req, res, next) => {
   await Notification.create({
     sender:req.user.id,
     receiver:req.params.id,
+    avatar:req.user.avatar,
     url:`/${req.user.username}`,
     notifiedMessage:`${req.user.username} started following you`
   })
@@ -159,7 +189,7 @@ exports.publicfeed = asyncHandler(async (req, res, next) => {
 
   const postIds = users.map((user) => user.posts).flat();
 
-  const posts = await Post.find({isPrivate:false})
+  let posts = await Post.find({})
     .populate({
       path: "comments",
       select: "text",
@@ -169,7 +199,10 @@ exports.publicfeed = asyncHandler(async (req, res, next) => {
     .sort("-createdAt")    
     .lean()
     .exec();
-
+    console.log(posts);
+posts = posts.filter(function(post){
+  return !post.isPrivate||post.accessibility.includes(req.username)
+});
   posts.forEach((post) => {
     // had the loggedin user liked the post
     post.isLiked = false;

@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import useLongPress from "./useLongPress";
 //import {MoreIcon}  from "../../Icons";
 import { connect } from "../../utils/fetchdata";
+import {logout} from "../home/Home";
 import { toast } from "react-toastify";
 import {ModalContentWrapper} from "./PostComponents";
 // {ThemeContext} from "../../context/ThemeContext";
@@ -31,6 +32,7 @@ const ModalContent = ({ postId,commentId, isMine,closeModal,commentsStateF}) => 
         commentsStateF({commentId});
         return toast.success("Comment deleted successfully")
     }).catch((err)=>{
+      err.logout&&logout();
       return toast.error(err.message)
     })
 

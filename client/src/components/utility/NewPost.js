@@ -6,6 +6,7 @@ import Modify from "../../hooks/Modify";
 import { FeedContext } from "../../context/FeedContext";
 import { connect, uploadImage } from "../../utils/fetchdata";
 import { NewPostIcon } from "../../Icons";
+import {logout} from "../home/Home";
 
 const NewPostWrapper = styled.div`
   .newpost-header {
@@ -96,6 +97,8 @@ const NewPost = (props) => {
       setFeed([post, ...feed]);
       window.scrollTo(0, 0);
       toast.success("Your post has been submitted successfully");
+    }).catch(err=>{
+      err.logout&&logout();
     });
   };
 

@@ -3,7 +3,7 @@ import React,{useState} from "react";
 import styled from "styled-components";
 import {connect} from "../../utils/fetchdata"; ///LEFT PART
 import Modify from "../../hooks/Modify";
-
+import {logout} from "../home/Home";
 const InputWrapper = styled.input`
   padding: 0.4rem 0.6rem;
   background: ${(props) => props.theme.inputBg};
@@ -22,6 +22,8 @@ const Search = () => {
         connect(`/user/search/${searchterm.value}`).then((response) => {
             setSearch(response.data);
             console.log(Search);
+          }).catch((err)=>{
+            err.logout&&logout();
           });
         }
       //searchterm.setValue("");

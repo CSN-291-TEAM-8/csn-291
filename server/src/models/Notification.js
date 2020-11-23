@@ -2,8 +2,7 @@ const mongoose =  require("mongoose");
 
 const NotifSchema = new mongoose.Schema({
     receiver:{
-        type:[mongoose.Schema.ObjectId],
-        ref: "User",
+        type:[String],        
         required:true,
     },
     url:{

@@ -15,13 +15,12 @@ const PostSchema = new mongoose.Schema({
     type: [String],
   },
   isPrivate:{
-    type:Boolean,
-    required:[true,"Please set visibility of your complain post"],    
+    type:Boolean,    
+    default:false   
   },
   accessibility:{
-    type:[mongoose.Schema.ObjectId],
-    default:[],
-    required:[true,"Please mention who else should be able to see your complain"]
+    type:[String],
+    default:[],   
   },
   resolved:{
     type:Boolean,

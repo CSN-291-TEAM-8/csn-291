@@ -12,6 +12,7 @@ import Avatar from "../../styles/Avatar";
 import { connect ,timeSince} from "../../utils/fetchdata";
 import {ThemeContext} from "../../context/ThemeContext";
 import { MoreIcon, CommentIcon, InboxIcon ,TickIcon} from "../../Icons";
+import {logout} from "../home/Home";
 
 export const ModalContentWrapper = styled.div`
   width: 300px;
@@ -74,7 +75,7 @@ export const PostWrapper = styled.div`
   }
   .post-img {
     width: 100%;
-    height: 500px;
+    height: 100%;
   }
   .post-actions {
     display: flex;
@@ -141,7 +142,10 @@ const PostComponents = ({ post }) => {
 
       connect(`/complain/${post._id}/comments`, {
         body: { text: comment.value },
-      }).then((resp) => setNewComments([...newComments, resp.data]));
+      }).then((resp) => setNewComments([...newComments, resp.data])).catch((err)=>{
+        if(err.logout)
+          logout();
+      });
 
       comment.setValue("");
     }

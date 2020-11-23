@@ -8,14 +8,10 @@ const db = require("./utils/db.config");
 const errorHandler = require("./middleware/errorhandle");
 
 const app = express();
-var corsOptions = {
-  origin: 'https://complaintlodgeriitr.herokuapp.com',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
 
-app.use(cors(corsOptions));
 db();
 app.use(express.json());
+app.use(cors());
 
 app.use("/auth", auth);//login or signup route
 app.use("/user", user);

@@ -17,24 +17,24 @@ const Wrapper = styled.div`
   }
 `;
 
+export const logout = () => {  
+  localStorage.clear();      
+  window.location.reload();      
+};
+
 const Home = () => {
   const {setUser } = useContext(UserContext);
   const { feed, setFeed } = useContext(FeedContext);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const logout = () => {
-      localStorage.clear();      
-      setUser(null);
-      window.location.reload();
-    };
+  useEffect(() => {   
 
     connect("/user/feed")
       .then((res) => {
         setFeed(res.data);
         setLoading(false);
       })
-			.catch(res => {console.log(res); toast.error("Unable to load feed");});
+			.catch(res => {console.log(res);toast.error("Unable to load feed"); res.logout&&logout();});
   }, [setFeed, setUser]);
 
   if (loading) {
