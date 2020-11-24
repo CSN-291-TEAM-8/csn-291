@@ -1,0 +1,49 @@
+how to operate this project on localhost:
+
+--------   CLIENT ------------
+
+step 1:navigate to the client directory
+
+step 2 : run the command `npm install`
+
+step 3 : run `npm start` finally to run this project on your browser
+
+Prerequisites :environment on which project was tested locally includes
+		 Version of node = 14.15.1
+		 Version of npm = 6.14.8
+		 
+		 
+---------- SERVER -------------
+
+Step 1:move to the server directory
+
+step 2:run `npm install`
+
+step 3: finally run `npm start` to run this project
+
+prerequisites : All modules mentioned in package.json file of server folder
+
+-------------------------------
+Testing credentials:
+
+You can use this credential to login as a demouser
+
+how to set .env
+--------------------------------
+client .env for localhost(use port 55000 to get rid of CORS error)
+
+REACT_APP_BACKEND_URL="http://localhost:55000"
+REACT_APP_UPLOAD_URL="https://api.cloudinary.com/v1_1/<YOUR_CLOUD_NAME>/image/upload"
+Loader="https://kkleap.github.io/assets/loaderi.gif"
+
+--------------------------------
+server .env 
+
+JWT_SECRET=<Any string you want>
+JWT_EXPIRE=30d
+MONGOURI="<your_mongo_uri>"
+
+You may use sendgrid api for sending email for OTP purpose.I have created a new email account instead and have used nodemailer.
+
+--------------------------------
+
