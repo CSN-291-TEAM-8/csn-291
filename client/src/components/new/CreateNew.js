@@ -97,6 +97,8 @@ const CreateNew = () => {
   const [postImage, setPostImage] = useState("");
 
   const addTags = ()=>{
+    if((privates&&privatesTags.includes(tag.value))||(!privates&&publicTags.includes(tag.value)))
+        return toast.error("Already added to tag list");
     connect(`/user/${tag.value}`,{method:"POST"}).then(()=>{
       tag.setValue("");
       toast.success("Added to tag");
@@ -106,7 +108,7 @@ const CreateNew = () => {
       setPublicTags([...publicTags,tag.value]);
   }).catch(err=>{
     if(err){
-      toast.error("This username is not available")
+      toast.error("this username not accessible.Check your connection and type correct username")
     }
   })
 }
@@ -195,7 +197,7 @@ const CreateNew = () => {
               Add details<br/>              
               <textarea
                 className="input"
-                placeholder="Mendatory field"
+                placeholder="Mandatory field"
                 value={detail.value}
                 onChange={detail.onChange}
               />
@@ -213,7 +215,7 @@ const CreateNew = () => {
                <br/> <input 
                   type="text"
                   className="input"
-                  placeholder="Mendatory field" 
+                  placeholder="Mandatory field" 
                   value={tag.value} 
                   onChange={tag.onChange}/>
                   <Button className="btn" onClick={addTags}>Add</Button>

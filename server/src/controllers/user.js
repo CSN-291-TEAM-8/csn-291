@@ -39,22 +39,27 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   if(user._id.toString()===req.user.id){
     user = await User.findOne({ username: req.params.username })
     .select("-password")
-    .populate({ path: "posts", select: "files commentsCount likesCount" })
-    .populate({ path: "savedComplaints", select: "files commentsCount likesCount" })
+    .populate({ path: "posts", select: "files commentsCount likesCount accessibility user" })
+    .populate({ path: "savedComplaints", select: "files commentsCount likesCount accessibility" })
     .populate({ path: "followers", select: "avatar username fullname" })
     .populate({ path: "following", select: "avatar username fullname" })     
     .lean()
     .exec();
+    
   }
   else{
     user = await User.findOne({ username: req.params.username })
     .select("-password")
-    .populate({ path: "posts", select: "files commentsCount likesCount" })
-    .populate({ path: "taggedComplaints", select: "files commentsCount likesCount" })
+    .populate({ path: "posts", select: "files commentsCount likesCount accessibility user" })
+    .populate({ path: "taggedComplaints", select: "files commentsCount likesCount accessibility" })
     .populate({ path: "followers", select: "avatar username fullname" })
     .populate({ path: "following", select: "avatar username fullname" })     
     .lean()
     .exec();
+    if(user)
+    user.taggedComplaints = user.taggedComplaints.filter((complain)=>{
+      return complain&&complain.accessibility&&((complain.accessibility.length>0&&complain.accessibility.includes(req.user.username))||complain.accessibility.length==0)
+    })
   }
 
   if (!user) {
@@ -62,6 +67,16 @@ exports.getUser = asyncHandler(async (req, res, next) => {
       message: `The user ${req.params.username} is not found`,
       statusCode: 404,
     });
+  }
+  else{
+    console.log(user.posts);
+   user.posts =  user.posts.filter((post)=>{
+      return post.user.toString()==req.user.id||post.accessibility.length==0||(post.accessibility.length>0&&post.accessibility.includes(req.user.username));
+    })
+    user.postCount = user.posts.length;
+   //delete user.posts["user"];
+   console.log(user.posts);
+    
   }
 
   user.isFollowing = false;
@@ -86,19 +101,19 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   }
 
   user.isMe = req.user.id === user._id.toString();
-  console.log("\n\n\nreq.user",user);
-  res.status(200).json({ success: true, data: user,notices:req.notices });
+  //console.log("\n\n\nreq.user",user);
+  res.status(200).json({ success: true, data: user});
 },500)
 });
 exports.sendNotice = asyncHandler(async (req,res,next) =>{
-  //console.log(req.notices);
+  //////console.log(req.notices);
   if(req.user){
     Notification.find({}).sort({createdAt:-1}).then((notices)=>{
-      //console.log(notices);
+      //////console.log(notices);
       notices = notices.filter(function(notice){
           return notice.receiver.includes(req.user.id)||notice.receiver.includes(req.user.username);
       })
-      console.log(notices);
+      ////console.log(notices);
       res.status(200).json({success:true,notices});
   })
 }
@@ -199,10 +214,11 @@ exports.publicfeed = asyncHandler(async (req, res, next) => {
     .sort("-createdAt")    
     .lean()
     .exec();
-    console.log(posts);
+    ////console.log(posts);
 posts = posts.filter(function(post){
-  return !post.isPrivate||post.accessibility.includes(req.username)
+  return post.accessibility.includes(req.user.username)||!post.isPrivate;
 });
+console.log(posts);
   posts.forEach((post) => {
     // had the loggedin user liked the post
     post.isLiked = false;

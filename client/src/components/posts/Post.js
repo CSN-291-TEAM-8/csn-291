@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import LikePost from "./LikePost";
@@ -14,7 +15,7 @@ import modify from "../../hooks/Modify";
 import { timeSince,connect } from "../../utils/fetchdata";
 import {ThemeContext} from "../../context/ThemeContext";
 import {logout} from "../home/Home";
-import { MoreIcon, CommentIcon, InboxIcon,TickIcon,CloseIcon} from "../../Icons";
+import { MoreIcon, CommentIcon, InboxIcon,TickIcon,CloseIcon,PrivateIcon} from "../../Icons";
 import {MobileWrapper,modalHeaderStyle,ModalContentWrapper} from "../dashboard/ProfileHeader";
 const Wrapper = styled.div`
   display: grid;
@@ -68,6 +69,7 @@ const Wrapper = styled.div`
   }
   svg {
     margin-right: 1rem;
+    
   }
   .post-img-inverted{
     filter:invert(50%);
@@ -124,6 +126,7 @@ const Post = () => {
     setShowModal(false);
     setShowLikes(false);
   }
+  
   const showlikewalaModal = ()=>{
     // if(screen.availWidth<600){
     //   history.push(`/likes/${post._id}`)
@@ -171,7 +174,9 @@ const Post = () => {
     //console.log(comments);      
     setComments(comments);
   }
-
+  const showToast = ()=>{
+    return toast.success("This is a private complain")
+  }
   useEffect(() => {
     window.scrollTo(0, 0);
     connect(`/complain/${postId}`)
@@ -223,7 +228,7 @@ const Post = () => {
               src={post.user?.avatar}
               alt="avatar"
             />
-
+              {post.isPrivate&&<PrivateIcon fill={theme.primaryColor} transform={"scale(1.2)"} onClick={showToast}/>}
             <h3
               className="pointer"
               onClick={() => history.push(`/${post.user?.username}`)}
@@ -345,7 +350,7 @@ const Post = () => {
               decLikes={decLikes}
             />
             <CommentIcon theme={theme} />
-            <InboxIcon theme={theme} />
+            <CopyToClipboard text={`see this complaint post by ${post.user.username}. Open the link ${window.location.href}`} onCopy={() => toast.success("Link copied to clipboard")}><InboxIcon theme={theme} /></CopyToClipboard>
             <SavedComplaints isSaved={post?.isSaved} postId={post?._id} />
           </div>
 

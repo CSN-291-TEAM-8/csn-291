@@ -48,25 +48,16 @@ exports.getPost = asyncHandler(async (req, res, next) => {
   post.likers =[];
   post.isLiked = post.likes.toString().includes(req.user.id);
   post.likes.forEach(async function(id){
-    //console.log(id);
+    //////console.log(id);
     let user = await User.findById(id).lean().exec();    
-      //console.log(user);
+      //////console.log(user);
       if(user){
-        console.log(user);
+        ////console.log(user);
       post.likers.push({username:user.username,id:id.toString(),avatar:user.avatar,fullname:user.fullname});
       
-      //console.log(likes)
+      //////console.log(likes)
       }    
-  })
-  // is the post belongs to loggedin user?
-
-  
-  
-
-  
-
-  // is the loggedin user liked the post??
-  
+  }) 
 
   // is the loggedin user liked the post??
   const savedComplaints = req.user.savedComplaints.map((post) => post.toString());
@@ -83,13 +74,13 @@ exports.getPost = asyncHandler(async (req, res, next) => {
   });
   
   setTimeout(function(){
-    console.log(post);    
+    ////console.log(post);    
     res.status(200).json({ success: true, data: post });
 },1000)
 });
 exports.Highlight = asyncHandler(async(req,res,next)=>{
   const post = await Post.find({isPrivate:false,resolved:false}).sort({commentsCount:-1,likesCount:-1});
-  console.log(post);
+  ////console.log(post);
   res.status(200).json({success:true,data:post});
 }) 
 exports.reportComplain = asyncHandler(async(req,res,next)=>{
@@ -135,14 +126,15 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
       statusCode: 401,
     });
   }
+    
+   
   await Notification.deleteMany({postId:req.params.id},function(err,res){
-    if(err)
-      console.log(err);
+    //if(err)
+      ////console.log(err);
   });
-  await User.findByIdAndUpdate(req.user.id, {
-    $pull: { posts: req.params.id },
-    $inc: { postCount: -1 },
-  });
+  await User.updateMany({taggedComplaints:req.params.id},
+    {$pull: { taggedComplaints: req.params.id }},    
+  );
 
   await post.remove();
 
@@ -152,16 +144,16 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
 exports.addPost = asyncHandler(async (req, res, next) => {
   const { caption, files, tags,isPrivate ,accessibility} = req.body;
   const user = req.user.id;
-  console.log(req.body);
+  ////console.log(req.body);
   let post = await Post.create({ caption, files, tags, user,isPrivate,accessibility});
   if(isPrivate){
-    await Notification.create({receiver:accessibility,avatar:files[0],sender:user,postId:post._id,type:"newPost",url:`/p/${post._id}`,notifiedMessage:`${req.user.username} added a private complaint post and tagged you.Click to view it`});
+    await Notification.create({receiver:accessibility.filter((tag)=>{return tag!=req.user.username}),avatar:files[0],sender:user,postId:post._id,type:"newPost",url:`/p/${post._id}`,notifiedMessage:`${req.user.username} added a private complaint post and tagged you.Click to view it`});
   }
   else{
     let receiver = req.user.followers;
     if(receiver)
-    receiver = receiver.concat(tags);
-    console.log(receiver);
+    receiver = receiver.concat(tags.filter((tag)=>{return tag!=req.user.username}));
+    ////console.log(receiver);
     await Notification.create({receiver:receiver,avatar:files[0],sender:user,postId:post._id,type:"newPost",url:`/p/${post._id}`,notifiedMessage:`${req.user.username} added a general complaint post.Click to view it`});
   }
 
@@ -169,7 +161,17 @@ exports.addPost = asyncHandler(async (req, res, next) => {
     $push: { posts: post._id },
     $inc: { postCount: 1 },
   });
-
+ 
+  //   const users =await User.find({}).where("username").in(tags);
+  //   setTimeout(function(){
+  //   users.forEach(user=>{
+  //     user.taggedComplaints.push(post._id);
+  //     user.save();
+  //   })
+  // },1000);
+     
+  
+  
   post = await post
     .populate({ path: "user", select: "avatar username fullname" })
     .execPopulate();
@@ -188,7 +190,7 @@ exports.toggleLike = asyncHandler(async (req, res, next) => {
     });
   }
   
-  if(post.accessibility.length>0&&!post.accessibility.includes(req.user.username)){
+  if(post.user.toString()!=req.user.id&&(post.accessibility.length>0&&!post.accessibility.includes(req.user.username))){
     return next({
         message:"You are not authorised to access this post",
         statusCode:401,
@@ -221,7 +223,7 @@ exports.addComment = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
-  if(post.accessibility.length>0&&!post.accessibility.includes(req.user.username)){
+  if(post.user.toString()!=req.user.id&&(post.accessibility.length>0&&!post.accessibility.includes(req.user.username))){
     return next({
         message:"You are not authorised to access this post",
         statusCode:401,
@@ -255,7 +257,7 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
     });
   }
   
-  if(post.accessibility.length>0&&!post.accessibility.includes(req.user.username)){
+  if(post.user.toString()!=req.user.id&&(post.accessibility.length>0&&!post.accessibility.includes(req.user.username))){
     return next({
         message:"You are not authorised to access this post",
         statusCode:401,
@@ -280,8 +282,8 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
     });
   }
   await Notification.deleteOne({sender:req.user.id,postId:req.params.id,commentId:req.params.commentId},function(err,res){
-    if(err)
-     console.log(err);
+    //if(err)
+     ////console.log(err);
   });
 
   // remove the comment from the post
@@ -347,7 +349,8 @@ exports.toggleSave = asyncHandler(async (req, res, next) => {
       statusCode: 404,
     });
   }
-  if(post.accessibility.length>0&&!post.accessibility.includes(req.user.id)){
+  console.log(post);
+  if(post.user.toString()!=req.user.id&&(post.accessibility.length>0&&!post.accessibility.includes(req.user.username))){
     return next({
         message:"You are not authorised to access this post",
         statusCode:401,
@@ -356,12 +359,12 @@ exports.toggleSave = asyncHandler(async (req, res, next) => {
   const { user } = req;
 
   if (user.savedComplaints.includes(req.params.id)) {
-    console.log("removing saved complain");
+    ////console.log("removing saved complain");
     await User.findByIdAndUpdate(user.id, {
       $pull: { savedComplaints: req.params.id },
     });
   } else {
-    console.log("saving complain");
+    ////console.log("saving complain");
     await User.findByIdAndUpdate(user.id, {
       $push: { savedComplaints: req.params.id },
     });

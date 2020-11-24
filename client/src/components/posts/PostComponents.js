@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import LikePost from "./LikePost";
 import SavedComplaints from "./SavedComplaints";
 import Comment from "./Comment";
@@ -11,8 +13,9 @@ import Modify from "../../hooks/Modify";
 import Avatar from "../../styles/Avatar";
 import { connect ,timeSince} from "../../utils/fetchdata";
 import {ThemeContext} from "../../context/ThemeContext";
-import { MoreIcon, CommentIcon, InboxIcon ,TickIcon} from "../../Icons";
+import { MoreIcon, CommentIcon, InboxIcon ,TickIcon,PrivateIcon} from "../../Icons";
 import {logout} from "../home/Home";
+
 
 export const ModalContentWrapper = styled.div`
   width: 300px;
@@ -37,6 +40,7 @@ export const ModalContent = ({ hideGotoPost, postId, closeModal,resolved,post,is
     closeModal();
     history.push(`/p/${postId}`);
   };
+  
   const ReportPost=()=>{
     history.push(`/report/${postId}`)
   }
@@ -129,7 +133,9 @@ const PostComponents = ({ post }) => {
   const closeModal = () => {
     setShowModal(false);    
   }
-
+  const showToast = ()=>{
+    return toast.success("This is a private complaint");
+  }
   const [newComments, setNewComments] = useState([]);
   const [likesState, setLikes] = useState(post.likesCount);
 
@@ -162,6 +168,7 @@ const PostComponents = ({ post }) => {
             alt="avatar"
             onClick={() => history.push(`/${post.user?.username}`)}
           />
+        {post.isPrivate&&<PrivateIcon fill={theme.primaryColor} transform={"scale(1.2)"} onClick={showToast}/>}
           <h3
             className="pointer"
             onClick={() => history.push(`/${post.user?.username}`)}
@@ -192,6 +199,7 @@ const PostComponents = ({ post }) => {
       />
 }
 
+
       <div className="post-actions">
         <LikePost
           isLiked={post.isLiked}
@@ -200,7 +208,7 @@ const PostComponents = ({ post }) => {
           decLikes={decLikes}
         />
         <CommentIcon theme={theme} onClick={() => history.push(`/p/${post._id}`)} />
-        <InboxIcon theme={theme} />
+        <CopyToClipboard text={`see this complaint post by ${post.user.username}. Open the link ${window.location.href}`} onCopy={() => toast.success("Link copied to clipboard")}><InboxIcon theme={theme} /></CopyToClipboard>
         <SavedComplaints isSaved={post.isSaved} postId={post._id} />
       </div>
 

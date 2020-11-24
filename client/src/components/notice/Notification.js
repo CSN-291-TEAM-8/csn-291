@@ -14,6 +14,7 @@ import Avatar from "../../styles/Avatar";
 const NoticeModal = styled.div`
 width:60%;
 margin:auto;
+margin-top:3.5rem !important;
 display:flex;
 flex-wrap:wrap;
 flex-direction:column;
@@ -35,7 +36,7 @@ padding:10px 8px;
 }
 .userdetail{
     display:flex;
-    width:150px;
+    width:80%;
     cursor:pointer;
     flex-wrap:nowrap;
     
@@ -86,7 +87,7 @@ if (loading) {
             {Notice.length > 0 ? (
         <>
           <div className="notice">
-          <h3 style={{borderBottom:"1px solid white",paddingBottom:"4px"}}>Notifications</h3>
+          <h3 style={{borderBottom:"1px solid white",padding:"20px 10px"}}>Notifications</h3>
             {Notice.map((notice) => (
               <NoticeComponents key={notice._id} notice={notice} />
             ))}

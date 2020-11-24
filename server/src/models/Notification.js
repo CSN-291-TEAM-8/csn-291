@@ -19,6 +19,9 @@ const NotifSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    avatar:{
+        type:String        
+    },
     notifiedMessage:{
         type:String,
         required: true,
